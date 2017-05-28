@@ -23,15 +23,15 @@ var goalData = [
   { name: 'Outcomes Review',
     actionType: 'Outcomes',
     notes: 'Make sure you have all the outcomes stuff needed. Check the checklist! You need to be there for a 12:30-1pm meeting.',
-    dateSubmitted: '05-27-2017',
-    dateDue: '06-01-2017',
+    dateSubmitted: '5/27/2017',
+    dateDue: '6/1/2017',
     location: 'weWork: 600 Congress'
   },
   { name: 'Outcomes Standup',
     actionType: 'Outcomes',
     notes: 'Compare charted progress and right a review before standup on what has been done. Also right down what will be accomplished by next standup',
-    dateSubmitted: '05-27-2017',
-    dateDue: '06-05-2017',
+    dateSubmitted: '5/27/2017',
+    dateDue: '6/5/2017',
     location: 'zoom link: https://generalassembly.zoom.us/j/2392046778?pwd=&status=success'
   },
 ];

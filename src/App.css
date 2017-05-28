@@ -53,6 +53,21 @@
   outline-width: 0px;
 }
 
+form{
+  display: inline-block;
+  text-align: center;
+}
+
+input, textarea{
+    display: block;
+    font-size:11px;
+    padding:4px 2px;
+    border:solid 1px #aacfe4;
+    width:100%;
+    /*margin:1px 0 20px 10px;*/
+    margin-bottom: 2%;
+}
+
 nav {
   list-style: none;
 }
@@ -63,7 +78,6 @@ nav {
   text-align: center;
   margin: 10px;
 }
-
 
 
 .headerContainer{
