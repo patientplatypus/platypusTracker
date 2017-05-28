@@ -1,0 +1,113 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+
+.calendarContainer{
+  display: inline-block;
+  background-color: tomato;
+  width: 100%;
+  height: auto;
+  text-align: center;
+}
+
+.calendarDetail{
+  display: inline-block;
+  width: 100%;
+  background-color: #F3C677;
+  margin: 0 auto;
+}
+
+.container{
+  text-align: center;
+  background-color: #7B1E7A;
+}
+
+.tabs li{
+  display: inline;
+  padding-left: 5%;
+  color: white;
+}
+
+.tabs{
+  margin-top: 0px;
+  background-color: #F3C677;
+}
+
+.calendar{
+  display: inline-block;
+  background: white;
+  width: 50%;
+  outline-width: 0px;
+}
+
+nav {
+  list-style: none;
+}
+
+.GoalsDue{
+  display: inline-block;
+  background-color: #F3C677;
+  text-align: center;
+  margin: 10px;
+}
+
+
+
+.headerContainer{
+  border-style: solid;
+  border-color: red;
+  border-width: 3px;
+  display: inline-block;
+  background-color: orange;
+  border-radius: 13px;
+  text-align: center;
+  width: auto;
+  /*padding-bottom: 0px;*/
+}
+
+.platypusIcon{
+  max-height: 100px;
+  width: auto;
+  float: left;
+  border-radius: 10px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+
+
+.platypusHeader{
+  display:inline-block;
+  width: auto;
+  float: left;
+  background: tomato;
+  border-radius: 10px;
+  margin-right: 10px;
+  padding: 5px;
+  /*adding margin pushes to new line. why?*/
+  /*margin-left: 0.5%;
+  margin-right: 0.5%;*/
+}
+
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
