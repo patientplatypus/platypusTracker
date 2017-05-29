@@ -38,11 +38,19 @@ class ListGoal extends Component {
   modifyItem(e){
     e.preventDefault();
     console.log("inside modifyItem");
-    this.setState({
-      modify: true
-    }, ()=>{
-      console.log('after setstate for modify in modifyItem and value of this.state.modify is ', this.state.modify);
-    })
+    if (this.state.modify===false){
+      this.setState({
+        modify: true
+      }, ()=>{
+        console.log('after setstate for modify in modifyItem and value of this.state.modify is ', this.state.modify);
+      })
+    }else{
+      this.setState({
+        modify: false
+      }, ()=>{
+        console.log('after setstate for modify in modifyItem and value of this.state.modify is ', this.state.modify);
+      })
+    }
   }
 
   setModify(){

@@ -7,7 +7,10 @@
     "react": "^15.5.4",
     "react-day-picker": "^5.5.3",
     "react-dom": "^15.5.4",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.1",
+    "react-speech": "^0.3.2",
+    "react-voice-components": "^1.0.0",
+    "render-if": "^0.1.1"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"
