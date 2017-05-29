@@ -96,14 +96,6 @@ class App extends Component {
           )
         }
 
-        // const AfterRedirect = () => {
-        //   this.setState({
-        //     redirect: ""
-        //   })
-        //   return(<div></div>)
-        // }
-
-
         const Speechy = ()=>{
           console.log('inside Speechy');
           var self = this;
@@ -140,12 +132,16 @@ class App extends Component {
                 console.log('You said: ', event.results[0][0].transcript);
 
                 if (event.results[0][0].transcript==="ping"){
-                  console.log('pong');
+                  // console.log('pong');
+                  var voices = speechSynthesis.getVoices();
+                  var u = new SpeechSynthesisUtterance();
+                  u.text = 'The quick brown fox jumped over the lazy brown dog';
+
+                  speechSynthesis.speak(u);
                 }
 
-                if (event.results[0][0].transcript==="add data"){
+                if (event.results[0][0].transcript==="go to data"){
                   console.log('attempting...');
-
                   self.setState({
                     redirect: "AddData"
                   }, ()=>{
@@ -155,7 +151,72 @@ class App extends Component {
                       })
                     },1000)
                   })
+                }
 
+                if (event.results[0][0].transcript==="go to welcome page"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "WelcomePage"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
+                }
+
+
+                if (event.results[0][0].transcript==="go to calendar"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "calendar"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
+                }
+
+                if (event.results[0][0].transcript==="go to goals"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "goals"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
+                }
+
+                if (event.results[0][0].transcript==="go to contacts"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "contacts"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
+                }
+
+                if (event.results[0][0].transcript==="go to jobs"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "jobs"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
                 }
 
             };
@@ -206,6 +267,21 @@ class App extends Component {
 
             {renderIf(this.state.redirect === "AddData")(
               <Redirect to="/AddData" push/>
+            )}
+            {renderIf(this.state.redirect === "WelcomePage")(
+              <Redirect to="/WelcomePage" push/>
+            )}
+            {renderIf(this.state.redirect === "contacts")(
+              <Redirect to="/ContactsPage" push/>
+            )}
+            {renderIf(this.state.redirect === "jobs")(
+              <Redirect to="/JobsPage" push/>
+            )}
+            {renderIf(this.state.redirect === "goals")(
+              <Redirect to="/GoalsPage" push/>
+            )}
+            {renderIf(this.state.redirect === "calendar")(
+              <Redirect to="/CalendarPage" push/>
             )}
 
           </div>

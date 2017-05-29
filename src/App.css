@@ -72,6 +72,28 @@ nav {
   list-style: none;
 }
 
+
+.jobsList{
+  background-color: #F3C677;
+  border-radius: 5px;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0 auto;
+  width: 80%;
+}
+
+.jobListing{
+  font-size: 10px;
+  margin-bottom: 3px;
+  border-style: solid;
+  border-width: medium;
+  border-color: #7B1E7A;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+
 .GoalsDue{
   display: inline-block;
   background-color: #F3C677;
