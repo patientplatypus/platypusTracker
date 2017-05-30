@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var calendar = require('./routes/calendar');
 var jobs = require('./routes/jobs');
+var contacts = require('./routes/contacts');
 var cors = require('cors');
 var app = express();
 
@@ -33,6 +34,7 @@ app.use(cors());
 app.use('/', index);
 app.use('/users', users);
 app.use('/calendar', calendar);
+app.use('/contacts', contacts);
 app.use('/jobs', jobs);
 
 

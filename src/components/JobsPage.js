@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ListJob from './ListJob';
+import ListJobBuilt from './ListJobBuilt';
 import renderIf from 'render-if';
 import ListSavedJob from './ListSavedJob';
 
@@ -11,9 +12,12 @@ class JobsPage extends Component {
       searchTerm: "",
       searchCity: "",
       searchResults: [],
+      searchResultsBuilt:[],
       savedJobs: [],
       showSaved: false,
-      showSearch: true
+      showSearch: true,
+      showSearchBuilt: true,
+      loading: false
     }
   }
 
@@ -21,7 +25,7 @@ class JobsPage extends Component {
     var self = this;
     // console.log('inside getCalendarInfo');
     //jobTitle jobLink companyName jobLocation jobDescription
-
+    //http://orig07.deviantart.net/e9e4/f/2015/145/5/b/5bfba23d515a76f42c3751d4b60dde64-d8uovty.gif
       axios.post('http://localhost:5000/jobs/alljobinfo')
         .then((response)=>{
             var arryAll = [];
@@ -34,6 +38,7 @@ class JobsPage extends Component {
               tempObj.companyName = job.companyName;
               tempObj.jobLocation = job.jobLocation;
               tempObj.jobDescription = job.jobDescription;
+              tempObj._id = job._id;
 
               arryAll.push(tempObj);
             });
@@ -57,6 +62,7 @@ class JobsPage extends Component {
               tempObj.companyName = job.companyName;
               tempObj.jobLocation = job.jobLocation;
               tempObj.jobDescription = job.jobDescription;
+              tempObj._id = job._id;
 
               arryAll.push(tempObj);
             });
@@ -70,6 +76,9 @@ class JobsPage extends Component {
   searchJobs(e){
     e.preventDefault();
     var self = this;
+    self.setState({
+      loading:true
+    })
     axios.post('http://localhost:5000/jobs/search',{
       searchTerm: this.state.searchTerm,
       searchCity: this.state.searchCity
@@ -77,7 +86,9 @@ class JobsPage extends Component {
     .then((response)=>{
       console.log("back from searchJobs and the response is, ", response);
       self.setState({
-        searchResults: response.data.returnedJobs
+        searchResults: response.data.returnedJobs,
+        searchResultsBuilt: response.data.returnedJobsBuilt,
+        loading: false
       })
     })
     .catch(()=>{
@@ -115,23 +126,22 @@ class JobsPage extends Component {
     }
   }
 
+  searchToggleBuilt(e){
+    e.preventDefault();
+    var self = this;
+    if(self.state.showSearchBuilt===false){
+      self.setState({
+        showSearchBuilt: true
+      })
+    }
+    if(self.state.showSearchBuilt===true){
+      self.setState({
+        showSearchBuilt: false
+      })
+    }
+  }
+
   render() {
-
-        // let listGoals;
-        //
-        // if(this.state.goalsToday!="nogoals"){
-        //   console.log("this.state.goalsToday if is (first condition)", this.state.goalsToday);
-        //       listGoals = this.state.goalsToday.data.map(goal => {
-        //         return (
-        //           <ListGoal handleModify={this.handleModify.bind(this)} handleForceUpdate={this.handleForceUpdate.bind(this)} key={goal._id} goal={goal} />
-        //         );
-        //       });
-        // }
-        // if(this.state.goalsToday==="nogoals"){
-        //   console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
-        //   listGoals = <div className="GoalsDue"><p>You have nothing due today!</p></div>
-        // }
-
 
             let listJobs;
 
@@ -148,13 +158,31 @@ class JobsPage extends Component {
               listJobs = <div><p>Search for jobs to populate!</p></div>
             }
 
+
+            let listJobsBuilt;
+
+            if(this.state.searchResultsBuilt.length!=0){
+              // console.log("this.state.goalsToday if is (first condition)", this.state.goalsToday);
+                  listJobsBuilt = this.state.searchResultsBuilt.map((job,i) => {
+                    return (
+                      <ListJobBuilt key={i} job={job} getJobsInfo={this.getJobsInfo.bind(this)}/>
+                    );
+                  });
+            }
+            if(this.state.searchResultsBuilt.length===0){
+              // console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
+              listJobsBuilt = <div><p>Search for jobs to populate!</p></div>
+            }
+
+
+
             let listSavedJobs;
 
             if(this.state.savedJobs.length!=0){
               // console.log("this.state.goalsToday if is (first condition)", this.state.goalsToday);
                   listSavedJobs = this.state.savedJobs.map((savedjob,i) => {
                     return (
-                      <ListSavedJob key={i} savedjob={savedjob} />
+                      <ListSavedJob key={i} savedjob={savedjob} getJobsInfo={this.getJobsInfo.bind(this)}/>
                     );
                   });
             }
@@ -183,6 +211,12 @@ class JobsPage extends Component {
                         id="searchCity"
                         placeholder="search city"/>
                 <button onClick={(e)=>this.searchJobs(e)}>Search!</button>
+                {renderIf(this.state.loading === true)(
+                  <div>
+                    <p>Loading!</p>
+                    <img className="loadingPlatypus" src='http://orig07.deviantart.net/e9e4/f/2015/145/5/b/5bfba23d515a76f42c3751d4b60dde64-d8uovty.gif'/>
+                  </div>
+                )}
               </form>
 
               <div className="jobsList">
@@ -196,9 +230,19 @@ class JobsPage extends Component {
                     {listJobs}
                   </div>
                 )}
+              </div>
 
-
-
+              <div className="jobsList">
+                <h3>Listings from Built-In-Austin</h3>
+                {renderIf(this.state.showSearchBuilt === false)(
+                  <button onClick={(e)=>this.searchToggleBuilt(e)}>Show Jobs Listings</button>
+                )}
+                {renderIf(this.state.showSearchBuilt === true)(
+                  <div>
+                    <button onClick={(e)=>this.searchToggleBuilt(e)}>Hide Jobs Listings</button>
+                    {listJobsBuilt}
+                  </div>
+                )}
               </div>
 
               <div className="savedJobsList jobsList">

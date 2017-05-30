@@ -1,6 +1,9 @@
 .App {
   text-align: center;
+  background-color: #7B1E7A;
 }
+
+
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
@@ -33,6 +36,50 @@
 .container{
   text-align: center;
   background-color: #7B1E7A;
+}
+
+.contactItem{
+  /*display: inline-block;*/
+  background-color: #F3C677;
+  border-color: #7B1E7A;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: medium;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.contactsContainer{
+  text-align: center;
+  display: inline-block;
+  align-items: center;
+  background-color: #F3C677;
+  width: 80%;
+}
+
+.searchTermForm{
+  /*max-width: 80%;
+  display: inline-block;
+  float: left;
+  clear: left;*/
+}
+
+.searchTermContainer{
+  float: left;
+  display: inline-block;
+  /*clear: left;*/
+}
+
+.loadingPlatypus{
+  height: 100px;
+  width: auto;
+}
+
+.contactsPageContainer{
+  text-align: center;
 }
 
 .tabs li{

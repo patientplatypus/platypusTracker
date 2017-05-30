@@ -22,10 +22,13 @@ router.post('/search', function(req,res,next){
   //https://www.indeed.com/jobs?as_and=programming&as_phr=&as_any=&as_not=&as_ttl=&as_cmp=&jt=all&st=&salary=&radius=25&l=Austin%2C+TX&fromage=any&limit=50&sort=&psf=advsrch
 
   // var url = "https://www.indeed.com/jobs?q="+req.body.searchTerm+"&l="+req.body.searchCity;
+  // http://www.builtinaustin.com/jobs#/jobs?f%5B%5D=im_job_categories%3A78&f%5B%5D=tags%3Aprogramming
+
   var returnArray = [];
-  var url = "https://www.indeed.com/jobs?as_and="+req.body.searchTerm+"&as_phr=&as_any=&as_not=&as_ttl=&as_cmp=&jt=all&st=&salary=&radius=25&l="+req.body.searchCity+
-     '&fromage=15&limit=20&sort=&psf=advsrch';
+  var returnArrayBuilt = [];
   var promise = new Promise(function(resolve){
+    var url = "https://www.indeed.com/jobs?as_and="+req.body.searchTerm+"&as_phr=&as_any=&as_not=&as_ttl=&as_cmp=&jt=all&st=&salary=&radius=25&l="+req.body.searchCity+
+       '&fromage=15&limit=20&sort=&psf=advsrch';
     request(url, function(err, resp, html) {
           if (!err){
             $ = cheerio.load(html);
@@ -64,17 +67,62 @@ router.post('/search', function(req,res,next){
             });
 
             var jobTitlehref = $('[data-tn-element=jobTitle]').attr('href');
-            console.log(returnArray);
-            console.log('counter ', counter);
-            console.log('organicJobs.length ', organicJobs.length);
+            // console.log(returnArray);
+            // console.log('counter ', counter);
+            // console.log('organicJobs.length ', organicJobs.length);
         }
     });
   });
 
   promise.then(function(resolve){
+
     if (resolve){
-      res.json({returnedJobs: returnArray});
+      var promise2 = new Promise(function(resolve2){
+        var url2 = 'http://www.builtinaustin.com/jobs#/jobs?f%5B%5D=im_job_categories%3A78&f%5B%5D=tags%3A'+req.body.searchTerm;
+        request(url2, function(err, resp, html) {
+              if (!err){
+                $ = cheerio.load(html);
+                var postingbox = $('.views-row');
+                postingbox.each(function(i, elem) {
+                  var tempObj = {};
+                  // console.log('postingbox eq(1) html', $(this).children().eq(1).find('.job-title').html());
+                  // console.log('postingbox eq(1) html', $(this).children().eq(1).find('.job-title').text());
+                  // console.log('postingbox eq(1) html', $(this).children().eq(1).find('.job-title').children().eq(0).attr('href'));
+                  // console.log('postingbox eq(1) html', $(this).children().eq(1).find('.job-company').html());
+                  // console.log('postingbox eq(1) html', $(this).children().eq(1).find('.job-company').text());
+                  // console.log('postingbox eq(1) html', $(this).children().eq(1).find('.job-company').children().eq(0).attr('href'));
+                  // console.log('postingbox eq(5) html', $(this).children().eq(5).children().eq(0).children().eq(1).text());
+
+
+
+                  tempObj.jobTitle = $(this).children().eq(1).find('.job-title').text();
+                  tempObj.jobLink = "http://www.builtinaustin.com"+$(this).children().eq(1).find('.job-title').children().eq(0).attr('href');
+                  tempObj.companyName = $(this).children().eq(1).find('.job-company').text();
+                  tempObj.daysAgo = $(this).children().eq(5).children().eq(0).children().eq(1).text();
+
+                  returnArrayBuilt[i] = tempObj;
+
+                  if (i===postingbox.length-1){
+                      resolve2(true);
+                  }
+                });
+              }
+            });
+      });
+      promise2.then(function(resolve2){
+        if (resolve2){
+          console.log('in resolve2');
+          res.json({returnedJobs: returnArray,
+                    returnedJobsBuilt: returnArrayBuilt});
+        }
+      });
     }
+
+
+
+    // if (resolve){
+    //   res.json({returnedJobs: returnArray});
+    // }
   });
 
 });
@@ -111,7 +159,19 @@ router.post('/alljobinfo', function(req,res,next){
   });
 });
 
+router.delete('/deleteItem/:delete_id',function(req,res,next){
+  console.log("inside delete method");
 
+  Jobs.remove({
+           _id: req.params.delete_id
+       }, function(err, job) {
+           if (err)
+               res.send(err);
+
+           res.json({ message: 'Successfully deleted',
+                      post: job});
+       });
+  });
 
 
 
