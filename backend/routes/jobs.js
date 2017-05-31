@@ -141,7 +141,8 @@ router.post('/addjob', function(req,res,next){
     jobLink: req.body.jobLink,
     companyName: req.body.companyName,
     jobLocation: req.body.jobLocation,
-    jobDescription: req.body.jobDescription
+    jobDescription: req.body.jobDescription,
+    jobStatus: 'saved'
   })
 
   job.save(function(err,post){

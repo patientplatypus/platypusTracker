@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var calendar = require('./routes/calendar');
 var jobs = require('./routes/jobs');
+var email = require('./routes/email');
 var contacts = require('./routes/contacts');
 var cors = require('cors');
 var app = express();
@@ -36,6 +37,7 @@ app.use('/users', users);
 app.use('/calendar', calendar);
 app.use('/contacts', contacts);
 app.use('/jobs', jobs);
+app.use('/email', email);
 
 
 // catch 404 and forward to error handler

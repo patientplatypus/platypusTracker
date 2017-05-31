@@ -38,6 +38,7 @@ class JobsPage extends Component {
               tempObj.companyName = job.companyName;
               tempObj.jobLocation = job.jobLocation;
               tempObj.jobDescription = job.jobDescription;
+              tempObj.jobStatus = job.jobStatus;
               tempObj._id = job._id;
 
               arryAll.push(tempObj);
@@ -62,6 +63,7 @@ class JobsPage extends Component {
               tempObj.companyName = job.companyName;
               tempObj.jobLocation = job.jobLocation;
               tempObj.jobDescription = job.jobDescription;
+              tempObj.jobStatus = job.jobStatus;
               tempObj._id = job._id;
 
               arryAll.push(tempObj);
@@ -182,7 +184,7 @@ class JobsPage extends Component {
               // console.log("this.state.goalsToday if is (first condition)", this.state.goalsToday);
                   listSavedJobs = this.state.savedJobs.map((savedjob,i) => {
                     return (
-                      <ListSavedJob key={i} savedjob={savedjob} getJobsInfo={this.getJobsInfo.bind(this)}/>
+                      <ListSavedJob key={i} savedjob={savedjob} getJobsInfo={this.getJobsInfo.bind(this)} sendSavedJobtoEmail={this.props.sendSavedJobtoEmail.bind(this)}/>
                     );
                   });
             }

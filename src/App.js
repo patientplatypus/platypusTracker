@@ -16,6 +16,7 @@ import JobsPage from './components/JobsPage';
 import ContactsPage from './components/ContactsPage';
 import WelcomePage from './components/WelcomePage';
 import AddData from './components/AddData';
+import SendMail from './components/SendMail';
 import renderIf from 'render-if';
 import "./App.css";
 
@@ -33,15 +34,29 @@ class App extends Component {
     super(props);
     this.state={
       initializedSpeech: false,
-      redirect: ""
+      redirect: "",
+      savedJobtoEmail: {}
     }
   }
 
-  componentDidMount() {
+  // componentDidMount() {
+  //
+  // }
 
+
+  sendSavedJobtoEmail(savedJob){
+    var self = this;
+    self.setState({
+      redirect: "email",
+      savedJobtoEmail:savedJob
+    }, ()=>{
+      setTimeout(function(){
+        self.setState({
+          redirect: ""
+        })
+      },1000)
+    })
   }
-
-
 
 
   render() {
@@ -67,7 +82,7 @@ class App extends Component {
         const xJobsPagex = () => {
           return(
             <div>
-              <JobsPage/>
+              <JobsPage sendSavedJobtoEmail={this.sendSavedJobtoEmail.bind(this)}/>
             </div>
           )
         }
@@ -92,6 +107,14 @@ class App extends Component {
           return(
             <div>
               <AddData/>
+            </div>
+          )
+        }
+
+        const xSendMailx = () => {
+          return(
+            <div>
+              <SendMail savedJobtoEmail={this.state.savedJobtoEmail}/>
             </div>
           )
         }
@@ -219,6 +242,19 @@ class App extends Component {
                   })
                 }
 
+                if (event.results[0][0].transcript==="go to email"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "email"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
+                }
+
             };
 
             this.setState({
@@ -255,6 +291,7 @@ class App extends Component {
               <li><Link to="/JobsPage">Platypus Jobs</Link></li>
               <li><Link to="/ContactsPage">Platypus Contacts</Link></li>
               <li><Link to="/AddData">Platypus Data Dashboard</Link></li>
+              <li><Link to="/SendMail">Email</Link></li>
             </nav>
 
             <Route exact path="/" component={xWelcomePagex}/>
@@ -264,6 +301,8 @@ class App extends Component {
             <Route path='/ContactsPage' component={xContactsPagex}/>
             <Route path='/WelcomePage' component={xWelcomePagex}/>
             <Route path='/AddData' component={xAddDatax}/>
+            <Route path='/SendMail' component={xSendMailx}/>
+
 
             {renderIf(this.state.redirect === "AddData")(
               <Redirect to="/AddData" push/>
@@ -282,6 +321,9 @@ class App extends Component {
             )}
             {renderIf(this.state.redirect === "calendar")(
               <Redirect to="/CalendarPage" push/>
+            )}
+            {renderIf(this.state.redirect === "email")(
+              <Redirect to="/SendMail" push/>
             )}
 
           </div>

@@ -10,7 +10,8 @@ var schema = new mongoose.Schema({
   jobLink: { type: String, required: false },
   companyName: { type: String, required: false },
   jobLocation: { type: String, required: false },
-  jobDescription: { type: String, required: false }
+  jobDescription: { type: String, required: false },
+  jobStatus: { type: String, required: false }
 });
 
 var Jobs = mongoose.model('Jobs', schema);

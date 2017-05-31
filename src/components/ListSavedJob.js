@@ -12,6 +12,7 @@ class ListSavedJob extends Component {
   //         console.log('this.props.goal.id in deleteItem in ListGoal', this.props.goal.id);
   //         console.log('this.props.goal._id in deleteItem in ListGoal', this.props.goal._id);
   // // /deleteItem/:delete_id
+  //sendSavedJobtoEmail
       var self = this;
       var url = 'http://localhost:5000/jobs/deleteItem/' + this.props.savedjob._id
 
@@ -26,6 +27,14 @@ class ListSavedJob extends Component {
 
     }
 
+
+    handleSendJobtoEmail(e){
+      e.preventDefault();
+      // debugger;
+      this.props.sendSavedJobtoEmail(this.props.savedjob);
+    }
+
+
   render() {
           return (
             <div className='jobListing'>
@@ -34,7 +43,10 @@ class ListSavedJob extends Component {
               <h4>{this.props.savedjob.companyName}</h4>
               <h4>{this.props.savedjob.jobLocation}</h4>
               <h4>{this.props.savedjob.jobDescription}</h4>
+              <h3>job status: {this.props.savedjob.jobStatus}</h3>
               <button onClick={(e)=>this.deleteSavedJob(e)}>Delete!</button>
+              <br/>
+              <button onClick={(e)=>this.handleSendJobtoEmail(e)}>Apply to this Job!</button>
             </div>
           );
         }
