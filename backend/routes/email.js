@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Templates = require('../models/templatesSchema');
 
 /* GET users listing. */
 router.post('/sendemail', function(req, res, next) {
@@ -27,5 +28,40 @@ router.post('/sendemail', function(req, res, next) {
   }, function(err, message) { console.log(err || message); });
 
 });
+
+
+// body: { type: String, required: false },
+// type: { type: String, required: false },
+// company: { type: String, required: false },
+// addressee: { type: String, required: false },
+// emailAddress:  { type: String, required: false }
+
+
+router.post('/addtemplate', function(req,res,next){
+
+  var template = new Templates({
+    body: req.body.body,
+  });
+
+  template.save(function(err,post){
+    if (err) {return next(err)}
+    res.json(200, post)
+  });
+
+});
+
+
+
+router.post('/retrievetemplates', function(req,res,next){
+
+  Templates.find({}, function(err,posts){
+    res.json(posts);
+  });
+
+});
+
+
+
+
 
 module.exports = router;

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import renderIf from 'render-if';
+import ListTemplate from './ListTemplate';
 
 class SendMail extends Component {
   constructor(props){
@@ -12,12 +13,25 @@ class SendMail extends Component {
       password: "",
       text: "",
       subject: "",
-      receiver: ""
+      receiver: "",
+      templateBody: "",
+      templateType: "",
+      templateCompany: "",
+      TemplateAddressee: "",
+      TemplateEmailAddress: "",
+      templateResults: [],
+      toggleMakeTemplate: false,
+      dummySavedJob: {}
     }
     var self = this;
   }
 
   // savedJobtoEmail
+  // body: { type: String, required: false },
+  // type: { type: String, required: false },
+  // company: { type: String, required: false },
+  // addressee: { type: String, required: false },
+  // emailAddress:  { type: String, required: false }
 
   componentWillMount() {
     console.log('inside componentWillMount of SendMail and the value of this.props.savedJobtoEmail is ', this.props.savedJobtoEmail);
@@ -50,7 +64,107 @@ class SendMail extends Component {
       })
   }
 
+  createTemplate(e){
+    e.preventDefault(e);
+    var self = this;
+    axios.post('http://localhost:5000/email/addtemplate',{
+      body: this.state.templateBody,
+    })
+    .then((response)=>{
+      // console.log("response from sending email ", response);
+      self.retrieveTemplates(e);
+    })
+  }
+
+  sendTemplatetoEmailFormJob(templateText, jobObj){
+    console.log('inside sendTemplatetoEmailFormJob');
+    var modifiedText = templateText.split("%%company%%").join(jobObj.companyName).split('%%job%%').join(jobObj.jobTitle);
+    var self = this;
+    self.setState({
+      text: modifiedText
+    })
+  }
+
+  sendTemplatetoEmailForm(templateText){
+    console.log('inside sendTemplatetoEmailForm');
+    var self = this;
+    self.setState({
+      text: templateText
+    })
+  }
+
+
+
+  retrieveTemplates(e){
+    e.preventDefault();
+
+    var self = this;
+      axios.post('http://localhost:5000/email/retrievetemplates')
+        .then((response)=>{
+            var arryAll = [];
+            var tempObj = {};
+
+            response.data.forEach((template)=>{
+              tempObj = {};
+              tempObj.body = template.body;
+              tempObj._id = template._id;
+              arryAll.push(tempObj);
+            });
+            self.setState({
+              templateResults: arryAll
+            });
+          });
+     this.forceUpdate();
+
+  }
+
+
+  toggleTemplateMaker(e){
+    e.preventDefault();
+
+    var self = this;
+
+    if(self.state.toggleMakeTemplate===false){
+      self.setState({
+        toggleMakeTemplate: true
+      })
+    }
+
+    if(self.state.toggleMakeTemplate===true){
+      self.setState({
+        toggleMakeTemplate: false
+      })
+    }
+  }
+
+
+
   render() {
+
+
+      let listTemplates;
+
+      if(this.state.templateResults.length!=0){
+            listTemplates = this.state.templateResults.map((template,i) => {
+              if (this.props.savedJobtoEmail.hasOwnProperty("jobTitle")){
+                console.log('inside hasOwnProperty jobTitle SENDMAIL')
+                return (
+                  <ListTemplate key={i} template={template} sendTemplatetoEmailFormJob={this.sendTemplatetoEmailFormJob.bind(this)}
+                  savedJobtoEmail={this.props.savedJobtoEmail}/>
+                );
+              }else{
+                console.log('inside DOES NOT hasOwnProperty jobTitle SENDMAIL')
+                return (
+                  <ListTemplate key={i} template={template} sendTemplatetoEmailForm={this.sendTemplatetoEmailForm.bind(this)}
+                  savedJobtoEmail={this.state.dummySavedJob}/>
+                );
+              }
+            });
+      }
+      if(this.state.templateResults.length===0){
+        listTemplates = <div><p> Search for templates to populate! If there are none, add some! </p></div>
+      }
+
           return (
             <div>
               <h1>Send Mail!</h1>
@@ -94,8 +208,47 @@ class SendMail extends Component {
                 <button onClick={(e)=>this.sendMyEmail(e)}>Send Email!</button>
               </form>
 
+              <br/>
+              {renderIf(this.state.toggleMakeTemplate)(
+                <div className='templateMakerDiv toggleTemplate'>
+                  <h1>Make New Mail Template!</h1>
+
+                  <form className="templateMakerForm">
+                    <textarea rows="10" cols="100"
+                            onChange={(e)=>this.setState({templateBody: e.target.value })}
+                            name="text"
+                            id="text"
+                            value={this.state.templateBody}
+                            placeholder="text"
+                    ></textarea>
+                    <button onClick={(e)=>this.createTemplate(e)}>create this template!</button>
+                    <button onClick={(e)=>this.sendTemplatetoEmailForm(e)}>send this template to email form!</button>
+                  </form>
+
+                    <button onClick={(e)=>this.toggleTemplateMaker(e)}>Hide Template Maker!</button>
+                </div>
+              )}
+
+              {renderIf(this.state.toggleMakeTemplate===false)(
+                  <button className="toggleTemplate" onClick={(e)=>this.toggleTemplateMaker(e)}>Show Template Maker!</button>
+              )}
+
+
+              <br/>
+              <button onClick={(e)=>this.retrieveTemplates(e)}>retrieve saved templates!</button>
+
+
+
+
+              <br/>
+              <div className='savedJobsList jobListing jobsList'>
+                {listTemplates}
+              </div>
+
+              <br/>
+
               {renderIf(this.props.savedJobtoEmail.hasOwnProperty("jobTitle"))(
-                <div className='jobListing'>
+                <div className='savedJobsList jobListing jobsList'>
                   <h2>This saved Job was sent to email!</h2>
                   <h3><strong>{this.props.savedJobtoEmail.jobTitle}</strong></h3>
                   <h4>{this.props.savedJobtoEmail.jobLink}</h4>

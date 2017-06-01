@@ -120,6 +120,22 @@ nav {
 }
 
 
+.templateMakerForm{
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.toggleTemplate{
+  margin: 10px 0;
+}
+
+.templateMakerDiv{
+  text-align: center;
+  margin: 0 auto;
+  width: 50%;
+}
+
 .jobsList{
   background-color: #F3C677;
   border-radius: 5px;
