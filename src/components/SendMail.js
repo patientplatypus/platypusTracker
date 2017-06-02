@@ -21,7 +21,11 @@ class SendMail extends Component {
       TemplateEmailAddress: "",
       templateResults: [],
       toggleMakeTemplate: false,
-      dummySavedJob: {}
+      dummySavedJob: {},
+      uploadList: [],
+      optionState: "please pick a file",
+      attachList:[],
+      attachListcomma: ''
     }
     var self = this;
   }
@@ -35,8 +39,22 @@ class SendMail extends Component {
 
   componentWillMount() {
     console.log('inside componentWillMount of SendMail and the value of this.props.savedJobtoEmail is ', this.props.savedJobtoEmail);
+
+
   }
 
+  componentDidMount() {
+
+    var self = this;
+
+      axios.get('http://localhost:5000/upload/getall')
+        .then((response)=>{
+          console.log('back from upload/getall', response.data);
+          const uploadList = self.state.uploadList.concat(response.data);
+          self.setState({uploadList});
+
+        })
+  }
 
   sendMyEmail(e){
     e.preventDefault();
@@ -45,19 +63,22 @@ class SendMail extends Component {
     var text = this.state.text;
     var subject = this.state.subject;
     var receiver = this.state.receiver;
+    var attachList = this.state.attachList;
     this.setState({
       username: "",
       password: "",
       text: "",
       subject: "",
-      receiver: ""
+      receiver: "",
+      attachList:[]
     })
       axios.post('http://localhost:5000/email/sendemail',{
         username: username,
         password: password,
         text: text,
         subject: subject,
-        receiver: receiver
+        receiver: receiver,
+        attachments: attachList
       })
       .then((response)=>{
         console.log("response from sending email ", response);
@@ -163,6 +184,24 @@ class SendMail extends Component {
 
   }
 
+  attachFile(e){
+    e.preventDefault();
+    var self = this;
+    if (self.state.optionState!="please select a file"){
+      const attachList = self.state.attachList.concat(self.state.optionState);
+      self.setState({attachList},()=>{
+        console.log('value of attachList after setting ', this.state.attachList);
+        const attachListcomma = this.state.attachList.join(', ')
+        self.setState({attachListcomma});
+      });
+    }
+
+
+
+
+
+  }
+
 
   toggleTemplateMaker(e){
     e.preventDefault();
@@ -182,9 +221,34 @@ class SendMail extends Component {
     }
   }
 
+  // handleSelectUpload(e){
+  //   e.preventDefault();
+  //   console.log('inside handleSelectUpload');
+  //   this.setState({
+  //     optionState:e.target.value
+  //   }, ()=>{
+  //     console.log("value of e.target.value in handleSelectUpload is ", e.target.value);
+  //     console.log("value of optionState after setting in handleSelectUpload is ", this.state.optionState);
+  //   })
+  // }
+  //
 
 
   render() {
+
+    let option = [];
+    option.push(<option key={0} value="please select">please select a file</option>)
+    var key = 1;
+    console.log('this.state.uploadList in render ', this.state.uploadList);
+    this.state.uploadList.map(item => {
+        option.push(<option key={key} value={item}>{item}</option>)
+        key++;
+      }
+    );
+    console.log('value of options after map ', option);
+
+
+
 
 
       let listTemplates;
@@ -252,8 +316,28 @@ class SendMail extends Component {
                         value={this.state.text}
                         placeholder="text"
                 ></textarea>
+                <select
+                onChange={(e)=>this.setState({optionState:e.target.value})}>
+                  {option}
+                </select>
+                <button onClick={(e)=>this.attachFile(e)}>Attach File!</button>
                 <button onClick={(e)=>this.sendMyEmail(e)}>Send Email!</button>
               </form>
+
+
+
+              {renderIf(this.state.attachList.length===0)(
+                <div>
+                  <p>You have no files attached!</p>
+                </div>
+              )}
+              {renderIf(this.state.attachList.length!=0)(
+                <div>
+                  <p>You have attached these files:</p>{this.state.attachListcomma}
+                </div>
+              )}
+
+
 
               <br/>
               {renderIf(this.state.toggleMakeTemplate)(

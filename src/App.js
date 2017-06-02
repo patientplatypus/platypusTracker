@@ -36,7 +36,7 @@ class App extends Component {
     this.state={
       initializedSpeech: false,
       redirect: "",
-      savedJobtoEmail: {}
+      savedJobtoEmail: {},
     }
   }
 
@@ -58,7 +58,6 @@ class App extends Component {
       },1000)
     })
   }
-
 
   render() {
 
@@ -123,7 +122,7 @@ class App extends Component {
         const xSendMailx = () => {
           return(
             <div>
-              <SendMail savedJobtoEmail={this.state.savedJobtoEmail}/>
+              <SendMail savedJobtoEmail={this.state.savedJobtoEmail} />
             </div>
           )
         }
