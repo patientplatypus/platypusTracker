@@ -95,6 +95,51 @@ class SendMail extends Component {
 
 
 
+  deleteTemplate(template){
+    var self = this;
+    var url = 'http://localhost:5000/email/deleteItem/' + template._id;
+
+    axios.delete(url)
+      .then((response)=>{
+        console.log('delete list item response is ', response);
+        self.retrieveTemplatesNoE();
+      })
+      .catch(function(error){
+        console.error(error);
+      })
+
+
+  }
+
+
+
+  retrieveTemplatesNoE(){
+
+    var self = this;
+      axios.post('http://localhost:5000/email/retrievetemplates')
+        .then((response)=>{
+            var arryAll = [];
+            var tempObj = {};
+
+            response.data.forEach((template)=>{
+              tempObj = {};
+              tempObj.body = template.body;
+              tempObj._id = template._id;
+              arryAll.push(tempObj);
+            });
+            self.setState({
+              templateResults: arryAll
+            });
+          });
+     this.forceUpdate();
+
+  }
+
+
+
+
+
+
   retrieveTemplates(e){
     e.preventDefault();
 
@@ -150,13 +195,15 @@ class SendMail extends Component {
                 console.log('inside hasOwnProperty jobTitle SENDMAIL')
                 return (
                   <ListTemplate key={i} template={template} sendTemplatetoEmailFormJob={this.sendTemplatetoEmailFormJob.bind(this)}
-                  savedJobtoEmail={this.props.savedJobtoEmail}/>
+                  savedJobtoEmail={this.props.savedJobtoEmail}
+                  deleteTemplate={this.deleteTemplate.bind(this)}/>
                 );
               }else{
                 console.log('inside DOES NOT hasOwnProperty jobTitle SENDMAIL')
                 return (
                   <ListTemplate key={i} template={template} sendTemplatetoEmailForm={this.sendTemplatetoEmailForm.bind(this)}
-                  savedJobtoEmail={this.state.dummySavedJob}/>
+                  savedJobtoEmail={this.state.dummySavedJob}
+                  deleteTemplate={this.deleteTemplate.bind(this)}/>
                 );
               }
             });

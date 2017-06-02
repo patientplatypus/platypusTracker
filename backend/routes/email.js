@@ -61,6 +61,21 @@ router.post('/retrievetemplates', function(req,res,next){
 });
 
 
+router.delete('/deleteItem/:delete_id',function(req,res,next){
+  console.log("inside delete method");
+
+  Templates.remove({
+           _id: req.params.delete_id
+       }, function(err, template) {
+           if (err)
+               res.send(err);
+
+           res.json({ message: 'Successfully deleted',
+                      post: template});
+       });
+
+  });
+
 
 
 

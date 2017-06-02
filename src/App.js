@@ -17,6 +17,7 @@ import ContactsPage from './components/ContactsPage';
 import WelcomePage from './components/WelcomePage';
 import AddData from './components/AddData';
 import SendMail from './components/SendMail';
+import UploadFiles from './components/UploadFiles';
 import renderIf from 'render-if';
 import "./App.css";
 
@@ -67,6 +68,14 @@ class App extends Component {
           return(
             <div>
               <CalendarPage/>
+            </div>
+          )
+        }
+
+        const xUploadFilesx = () => {
+          return(
+            <div>
+              <UploadFiles/>
             </div>
           )
         }
@@ -255,6 +264,19 @@ class App extends Component {
                   })
                 }
 
+                if (event.results[0][0].transcript==="go to upload"){
+                  console.log('attempting...');
+                  self.setState({
+                    redirect: "upload"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },1000)
+                  })
+                }
+
             };
 
             this.setState({
@@ -292,6 +314,8 @@ class App extends Component {
               <li><Link to="/ContactsPage">Platypus Contacts</Link></li>
               <li><Link to="/AddData">Platypus Data Dashboard</Link></li>
               <li><Link to="/SendMail">Email</Link></li>
+              <li><Link to="/UploadFiles">Upload Files</Link></li>
+
             </nav>
 
             <Route exact path="/" component={xWelcomePagex}/>
@@ -302,6 +326,8 @@ class App extends Component {
             <Route path='/WelcomePage' component={xWelcomePagex}/>
             <Route path='/AddData' component={xAddDatax}/>
             <Route path='/SendMail' component={xSendMailx}/>
+            <Route path='/UploadFiles' component={xUploadFilesx}/>
+
 
 
             {renderIf(this.state.redirect === "AddData")(
@@ -325,6 +351,10 @@ class App extends Component {
             {renderIf(this.state.redirect === "email")(
               <Redirect to="/SendMail" push/>
             )}
+            {renderIf(this.state.redirect === "upload")(
+              <Redirect to="/UploadFiles" push/>
+            )}
+
 
           </div>
         </Router>

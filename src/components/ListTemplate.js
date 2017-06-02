@@ -25,6 +25,11 @@ class ListTemplate extends Component {
     this.props.sendTemplatetoEmailFormJob(this.props.template.body, this.props.savedJobtoEmail);
   }
 
+  handleDeleteTemplate(e){
+    e.preventDefault();
+    this.props.deleteTemplate(this.props.template);
+  }
+
 
 
   render() {
@@ -36,6 +41,8 @@ class ListTemplate extends Component {
           <h3>Template (this.props.savedJobtoEmail)~</h3>
           <h4>{this.props.template.body}</h4>
           <button onClick={(e)=>this.handleSendToFormJob(e)}> Populate Email Form!</button>
+          <button onClick={(e)=>this.handleDeleteTemplate(e)}> Delete Template!</button>
+
         </div>
       );
     }else{
@@ -45,6 +52,8 @@ class ListTemplate extends Component {
           <h3>Template (this.props.savedJobtoEmail undefined)</h3>
           <h4>{this.props.template.body}</h4>
           <button onClick={(e)=>this.handleSendToForm(e)}> Populate Email Form!</button>
+          <button onClick={(e)=>this.handleDeleteTemplate(e)}> Delete Template!</button>
+
         </div>
       );
     }
