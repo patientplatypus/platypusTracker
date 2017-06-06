@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ModifyGoal from './ModifyGoal';
+import renderIf from 'render-if';
 
 class ListGoal extends Component {
   constructor(props){
@@ -78,17 +79,27 @@ class ListGoal extends Component {
         }
 
           return (
-            <div className="GoalsDue">
-              <strong>{this.props.goal.name}</strong> - {this.props.goal.location} - {this.props.goal.notes}
-              <button onClick={(e)=>this.deleteItem(e)}>Delete Item!</button>
-              <button onClick={(e)=>this.modifyItem(e)}>Change Item!</button>
+            <div>
+              {renderIf(this.props.goal.actionType != "***email***")(
+                <div className="GoalsDue">
+                   <strong>{this.props.goal.name}</strong> - {this.props.goal.location} <p> {this.props.goal.notes} </p>
+                   <button onClick={(e)=>this.deleteItem(e)}>Delete Item!</button>
+                   <button onClick={(e)=>this.modifyItem(e)}>Change Item!</button>
 
-              <div className="modifygoalcontainer">
-                  <XModifyGoalx/>
-              </div>
-
+                   <div className="modifygoalcontainer">
+                       <XModifyGoalx/>
+                   </div>
+                 </div>
+              )}
+              {renderIf(this.props.goal.actionType === "***email***")(
+                <div className="GoalsDue">
+                  <h3>{this.props.goal.name}</h3>
+                  <h4>Here is what you wrote:</h4>
+                  <p>{this.props.goal.notes}</p>
+                </div>
+              )}
             </div>
-          );
+          )
         }
 }
 

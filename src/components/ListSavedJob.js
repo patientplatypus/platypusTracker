@@ -8,11 +8,6 @@ class ListSavedJob extends Component {
 
     deleteSavedJob(e){
       e.preventDefault();
-
-  //         console.log('this.props.goal.id in deleteItem in ListGoal', this.props.goal.id);
-  //         console.log('this.props.goal._id in deleteItem in ListGoal', this.props.goal._id);
-  // // /deleteItem/:delete_id
-  //sendSavedJobtoEmail
       var self = this;
       var url = 'http://localhost:5000/jobs/deleteItem/' + this.props.savedjob._id
 
@@ -30,7 +25,6 @@ class ListSavedJob extends Component {
 
     handleSendJobtoEmail(e){
       e.preventDefault();
-      // debugger;
       this.props.sendSavedJobtoEmail(this.props.savedjob);
     }
 

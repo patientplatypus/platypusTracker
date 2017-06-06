@@ -90,6 +90,15 @@ class ContactsPage extends Component {
       .then((response)=>{
         console.log("result from contactAdd axios post is ", response)
         self.getContactsInfo();
+        self.setState({
+          linkedIn: "",
+          name: "",
+          profilePic: "",
+          email: "",
+          phone: "",
+          github: "",
+          notes: ""
+        })
       })
       .catch(function(error){
           console.error(error);
@@ -107,7 +116,8 @@ class ContactsPage extends Component {
           // console.log("this.state.goalsToday if is (first condition)", this.state.goalsToday);
               listContacts = this.state.contactResults.map((contact,i) => {
                 return (
-                  <ListContact key={i} contact={contact}/>
+                  <ListContact key={i} contact={contact}
+                    sendSavedContacttoEmail={this.props.sendSavedContacttoEmail.bind(this)}/>
                 );
               });
         }
@@ -182,41 +192,48 @@ class ContactsPage extends Component {
                           onChange={(e)=>this.setState({name: e.target.value })}
                           type="text"
                           name="name"
+                          value={this.state.name}
                           id="name"
                           placeholder="name"/>
                   <input
                           onChange={(e)=>this.setState({profilePic: e.target.value })}
                           type="text"
                           name="profilePic"
+                          value={this.state.profilePic}
                           id="profilePic"
                           placeholder="profilePic"/>
                   <input
                           onChange={(e)=>this.setState({linkedIn: e.target.value })}
                           type="text"
                           name="linkedIn"
+                          value={this.state.linkedIn}
                           id="linkedIn"
                           placeholder="linkedIn"/>
                   <input
                           onChange={(e)=>this.setState({email: e.target.value })}
                           type="text"
                           name="email"
+                          value={this.state.email}
                           id="email"
                           placeholder="email"/>
                   <input
                           onChange={(e)=>this.setState({phone: e.target.value })}
                           type="text"
                           name="phone"
+                          value={this.state.phone}
                           id="phone"
                           placeholder="phone"/>
                   <input
                           onChange={(e)=>this.setState({github: e.target.value })}
                           type="text"
                           name="github"
+                          value={this.state.github}
                           id="github"
                           placeholder="github"/>
                   <textarea rows="4" cols="50"
                           onChange={(e)=>this.setState({notes: e.target.value })}
                           name="notes"
+                          value={this.state.notes}
                           id="notes"
                           placeholder="notes"
                   ></textarea>

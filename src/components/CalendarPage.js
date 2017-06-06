@@ -76,7 +76,7 @@ class CalendarPage extends Component {
               displayInfo.map((goal, i) => (
                  (date==goal.date) ?
                   <div key={i}>
-                    🎁 {goal.name}
+                   {goal.name}
                   </div>
                   :
                   <div key={i}/>

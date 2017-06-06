@@ -37,6 +37,9 @@ class App extends Component {
       initializedSpeech: false,
       redirect: "",
       savedJobtoEmail: {},
+      savedContacttoEmail: {},
+      updatedJob: false,
+      updatedEmail: false
     }
   }
 
@@ -49,7 +52,25 @@ class App extends Component {
     var self = this;
     self.setState({
       redirect: "email",
-      savedJobtoEmail:savedJob
+      savedJobtoEmail:savedJob,
+      updatedJob: true,
+      updatedEmail: false
+    }, ()=>{
+      setTimeout(function(){
+        self.setState({
+          redirect: ""
+        })
+      },1000)
+    })
+  }
+
+  sendSavedContacttoEmail(savedContact){
+    var self = this;
+    self.setState({
+      redirect: "email",
+      savedContacttoEmail:savedContact,
+      updatedJob: false,
+      updatedEmail: true
     }, ()=>{
       setTimeout(function(){
         self.setState({
@@ -98,7 +119,7 @@ class App extends Component {
         const xContactsPagex = () => {
           return(
             <div>
-              <ContactsPage/>
+              <ContactsPage sendSavedContacttoEmail={this.sendSavedContacttoEmail.bind(this)}/>
             </div>
           )
         }
@@ -122,7 +143,9 @@ class App extends Component {
         const xSendMailx = () => {
           return(
             <div>
-              <SendMail savedJobtoEmail={this.state.savedJobtoEmail} />
+              <SendMail savedJobtoEmail={this.state.savedJobtoEmail} savedContacttoEmail={this.state.savedContacttoEmail}
+              updatedJob={this.state.updatedJob}
+              updatedEmail={this.state.updatedEmail}/>
             </div>
           )
         }

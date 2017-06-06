@@ -13,10 +13,17 @@ import React, { Component } from 'react';
 // github: this.state.github,
 // notes: this.state.notes
 
-
+// sendSavedContacttoEmail
 
 
 class ListContact extends Component {
+
+  handleSendContacttoEmail(e){
+    e.preventDefault();
+    // debugger;
+    this.props.sendSavedContacttoEmail(this.props.contact);
+  }
+
 
   render() {
           return (
@@ -27,6 +34,7 @@ class ListContact extends Component {
               <p>{this.props.contact.phone}</p>
               <p>{this.props.contact.github}</p>
               <p>{this.props.contact.notes}</p>
+              <button onClick={(e)=>this.handleSendContacttoEmail(e)}>Email this contact!</button>
             </div>
           );
         }

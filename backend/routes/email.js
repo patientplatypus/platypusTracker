@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Templates = require('../models/templatesSchema');
+var schedule = require('node-schedule');
+var moment = require('moment-timezone');
 const fs = require('fs');
 
 /* GET users listing. */
@@ -37,7 +39,11 @@ router.post('/sendemail', function(req, res, next) {
     subject: req.body.subject,
     cc: req.body.username,
     attachment: attachmentArray
- }, function(err, message) { console.log(err || message); });
+ }, function(err, message) {
+   if (err) res.send('error from sending email');
+    res.send('email sent successfully');
+
+  });
 
 });
 
@@ -67,6 +73,76 @@ router.post('/addtemplate', function(req,res,next){
   });
 
 });
+
+// var schedule = require('node-schedule');
+// var date = new Date(2012, 11, 21, 5, 30, 0);
+//
+// var j = schedule.scheduleJob(date, function(){
+//   console.log('The world is going to end today.');
+// });
+//
+// Say you very specifically want a function to execute at 5:30am on December 21, 2012. Remember - in JavaScript - 0 - January, 11 - December.
+
+router.post('/delayedemail', function(req,res,next){
+  console.log('top of delayedemail');
+  var date = new Date(2017,5,6,14,20,0);
+  var requser = req.body.username;
+  var reqpassword = req.body.password;
+  var reqtext = req.body.text;
+  var reqreceiver = req.body.receiver;
+  var reqsubject = req.body.subject;
+  var reqattachments = req.body.attachments;
+
+
+  //
+  // var j = schedule.scheduleJob(date, function(){
+  //  console.log('The world is going to end today.');
+  // });
+
+
+
+  var j = schedule.scheduleJob(date, function(){
+    console.log('now inside j delayedemail scheduler');
+    var email     = require("emailjs");
+    var server    = email.server.connect({
+     user:    requser,
+     password:reqpassword,
+     host:    "smtp.gmail.com",
+     port:    465,
+     ssl:     true
+   });
+
+    const attachmentArray = reqattachments.map((attachment) => {
+        var filetype = attachment.slice(-3);
+        if (filetype === "pdf") {
+          filetype = "application/pdf";
+        } else {
+          filetype = "image/"+filetype;
+        }
+
+        return {
+            path: __dirname+"/uploads/"+attachment,
+            type: filetype,
+            name: attachment
+        }
+    })
+
+    server.send({
+       text:    reqtext,
+       from:    requser,
+       to:      reqreceiver,
+       subject: reqsubject,
+       cc: requser,
+       attachment: attachmentArray
+    }, function(err, message) {
+      if (err) res.send('error from sending email');
+       res.send('email sent successfully');
+
+     });
+  });
+})
+
+
 
 
 

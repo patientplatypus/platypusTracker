@@ -21,6 +21,12 @@ router.post('/specificdateinfo', function(req,res,next){
 });
 
 
+//name: "*emailed" + name
+//actionType: email
+//notes: "email body"+text+{?followupemaildates}
+//dateDue: date.now() (cleaned)
+
+
 router.post('/addgoal', function(req,res,next){
 
   var goal = new Goals({

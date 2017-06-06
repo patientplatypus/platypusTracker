@@ -25,25 +25,14 @@ class SendMail extends Component {
       uploadList: [],
       optionState: "please pick a file",
       attachList:[],
-      attachListcomma: ''
+      attachListcomma: '',
+      savedJobtoEmail: {},
+      savedContacttoEmail: {}
     }
     var self = this;
   }
 
-  // savedJobtoEmail
-  // body: { type: String, required: false },
-  // type: { type: String, required: false },
-  // company: { type: String, required: false },
-  // addressee: { type: String, required: false },
-  // emailAddress:  { type: String, required: false }
-
   componentWillMount() {
-    console.log('inside componentWillMount of SendMail and the value of this.props.savedJobtoEmail is ', this.props.savedJobtoEmail);
-
-
-  }
-
-  componentDidMount() {
 
     var self = this;
 
@@ -52,18 +41,56 @@ class SendMail extends Component {
           console.log('back from upload/getall', response.data);
           const uploadList = self.state.uploadList.concat(response.data);
           self.setState({uploadList});
-
         })
+
+
+
+        if(this.props.savedJobtoEmail.hasOwnProperty('jobTitle') && this.props.updatedJob===true){
+
+          self.setState({
+             savedJobtoEmail: this.props.savedJobtoEmail,
+             savedContacttoEmail:{},
+
+           })
+        }
+        if(this.props.savedContacttoEmail.hasOwnProperty('name') && this.props.updatedEmail===true){
+
+          self.setState({
+            savedJobtoEmail: {},
+            savedContacttoEmail:this.props.savedContacttoEmail,
+            text:'Dear '+ this.props.savedContacttoEmail.name + ', ',
+            receiver:this.props.savedContacttoEmail.email,
+            updatedJob: false,
+            updatedEmail: true
+          })
+        }
+
+
   }
+
+
+
 
   sendMyEmail(e){
     e.preventDefault();
+    var self = this;
     var username = this.state.username;
     var password = this.state.password;
     var text = this.state.text;
     var subject = this.state.subject;
     var receiver = this.state.receiver;
     var attachList = this.state.attachList;
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+    var today = mm+'/'+dd+'/'+yyyy;
+
+    var emailname = "to: " + receiver + " subject: " + subject;
+
+
+
     this.setState({
       username: "",
       password: "",
@@ -81,9 +108,26 @@ class SendMail extends Component {
         attachments: attachList
       })
       .then((response)=>{
-        console.log("response from sending email ", response);
+        console.log('inside the after sendemail axios post in sendmail');
+
+        axios.post('http://localhost:5000/calendar/addgoal',{
+          name: emailname,
+          dateDue: today,
+          actionType: '***email***',
+          notes: text
+        })
+          .then((response)=>{
+            console.log("result from calendarAdd axios post IN EMAIL is ", response)
+          })
+          .catch(function(error){
+            console.error(error);
+          });
       })
   }
+
+
+
+
 
   createTemplate(e){
     e.preventDefault(e);
@@ -203,6 +247,14 @@ class SendMail extends Component {
   }
 
 
+  removeSavedJob(e){
+    e.preventDefault();
+    this.setState({
+      savedJobtoEmail: {}
+    })
+  }
+
+
   toggleTemplateMaker(e){
     e.preventDefault();
 
@@ -221,17 +273,40 @@ class SendMail extends Component {
     }
   }
 
-  // handleSelectUpload(e){
-  //   e.preventDefault();
-  //   console.log('inside handleSelectUpload');
-  //   this.setState({
-  //     optionState:e.target.value
-  //   }, ()=>{
-  //     console.log("value of e.target.value in handleSelectUpload is ", e.target.value);
-  //     console.log("value of optionState after setting in handleSelectUpload is ", this.state.optionState);
-  //   })
-  // }
-  //
+
+  delayedEmailTest(e){
+    e.preventDefault();
+    var self = this;
+
+
+    var self = this;
+    var username = this.state.username;
+    var password = this.state.password;
+    var text = this.state.text;
+    var subject = this.state.subject;
+    var receiver = this.state.receiver;
+    var attachList = this.state.attachList;
+
+    this.setState({
+      username: "",
+      password: "",
+      text: "",
+      subject: "",
+      receiver: "",
+      attachList:[]
+    })
+      axios.post('http://localhost:5000/email/delayedemail',{
+        username: username,
+        password: password,
+        text: text,
+        subject: subject,
+        receiver: receiver,
+        attachments: attachList
+      })
+      .then((response)=>{
+        console.log('inside the after delayedemail axios post in sendmail');
+      });
+  }
 
 
   render() {
@@ -322,6 +397,7 @@ class SendMail extends Component {
                 </select>
                 <button onClick={(e)=>this.attachFile(e)}>Attach File!</button>
                 <button onClick={(e)=>this.sendMyEmail(e)}>Send Email!</button>
+                <button onClick={(e)=>this.delayedEmailTest(e)}>Delay Test</button>
               </form>
 
 
@@ -378,18 +454,26 @@ class SendMail extends Component {
 
               <br/>
 
-              {renderIf(this.props.savedJobtoEmail.hasOwnProperty("jobTitle"))(
+              {renderIf(this.state.savedJobtoEmail.hasOwnProperty("jobTitle"))(
                 <div className='savedJobsList jobListing jobsList'>
                   <h2>This saved Job was sent to email!</h2>
-                  <h3><strong>{this.props.savedJobtoEmail.jobTitle}</strong></h3>
-                  <h4>{this.props.savedJobtoEmail.jobLink}</h4>
-                  <h4>{this.props.savedJobtoEmail.companyName}</h4>
-                  <h4>{this.props.savedJobtoEmail.jobLocation}</h4>
-                  <h4>{this.props.savedJobtoEmail.jobDescription}</h4>
-                  <h3>job status: {this.props.savedJobtoEmail.jobStatus}</h3>
+                  <h3><strong>{this.state.savedJobtoEmail.jobTitle}</strong></h3>
+                  <h4>{this.state.savedJobtoEmail.jobLink}</h4>
+                  <h4>{this.state.savedJobtoEmail.companyName}</h4>
+                  <h4>{this.state.savedJobtoEmail.jobLocation}</h4>
+                  <h4>{this.state.savedJobtoEmail.jobDescription}</h4>
+                  <h3>job status: {this.state.savedJobtoEmail.jobStatus}</h3>
+                  <button onClick={(e)=>this.removeSavedJob(e)}>Remove Saved Job from Email!</button>
                 </div>
               )}
 
+              {renderIf(this.state.savedContacttoEmail.hasOwnProperty("name"))(
+                <div className='savedJobsList jobListing jobsList'>
+                  <h2>This Contact was sent to email!</h2>
+                  <h3>Here are your notes on this guy :D</h3>
+                  <h4>{this.state.savedContacttoEmail.notes}</h4>
+                </div>
+              )}
 
             </div>
           );

@@ -24,6 +24,8 @@ class AddData extends Component {
   calendarAdd(e){
     e.preventDefault();
 
+    var self = this;
+
     axios.post('http://localhost:5000/calendar/addgoal', {
       name: this.state.name,
       actionType: this.state.actionType,
@@ -34,6 +36,16 @@ class AddData extends Component {
     })
       .then((response)=>{
         console.log("result from calendarAdd axios post is ", response)
+
+        self.setState({
+          name: '',
+          actionType: '',
+          notes: '',
+          dateSubmitted: '',
+          datedue: '',
+          location: ''
+        })
+
       })
       .catch(function(error){
           console.error(error);
@@ -52,17 +64,20 @@ class AddData extends Component {
                         onChange={(e)=>this.setState({name: e.target.value })}
                         type="text"
                         name="name"
+                        value={this.state.name}
                         id="name"
                         placeholder="name"/>
                 <input
                         onChange={(e)=>this.setState({actionType: e.target.value })}
                         type="text"
                         name="actionType"
+                        value={this.state.actionType}
                         id="actionType"
                         placeholder="actionType"/>
                 <textarea rows="4" cols="50"
                         onChange={(e)=>this.setState({notes: e.target.value })}
                         name="notes"
+                        value={this.state.notes}
                         id="notes"
                         placeholder="notes"
                 ></textarea>
@@ -70,18 +85,21 @@ class AddData extends Component {
                         onChange={(e)=>this.setState({dateSubmitted: e.target.value })}
                         type="text"
                         name="dateSubmitted"
+                        value={this.state.dateSubmitted}
                         id="dateSubmitted"
                         placeholder="dateSubmitted"/>
                 <input
                         onChange={(e)=>this.setState({dateDue: e.target.value })}
                         type="text"
                         name="dateDue"
+                        value={this.state.dateDue}
                         id="dateDue"
                         placeholder="dateDue"/>
                 <input
                         onChange={(e)=>this.setState({location: e.target.value })}
                         type="text"
                         name="location"
+                        value={this.state.location}
                         id="location"
                         placeholder="location"/>
                 <button onClick={(e)=>this.calendarAdd(e)}>Add Goal!</button>
