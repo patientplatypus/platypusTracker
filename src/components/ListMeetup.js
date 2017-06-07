@@ -2,6 +2,46 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import Paper from 'material-ui/Paper';
+import Button from './Button';
+
+
+const styles = {
+  base: {
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
+  button: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+  },
+  addtocalendar: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    width: '50%'
+  },
+  textInput: {
+    marginRight: '10px',
+    color: '#F3C677',
+  },
+  textInputInput: {
+    color: '#F3C677',
+  },
+  paper:{
+    height: "auto",
+    width: "80%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#F2DCB5',
+    display: 'inline-block',
+  }
+};
+
 
 class ListMeetup extends Component {
   constructor(props){
@@ -61,25 +101,21 @@ class ListMeetup extends Component {
 
 
   render() {
-    //
-    // const XDescriptionx = ()=>{
-    //   var description = this.props.meetup.description;
-    //   return(
-    //     <div>
-    //         <div dangerouslySetInnerHTML={__html: description} />
-    //     </div>
-    //   )
-    // }
-
-
           return (
-            <div>
-              <strong>{this.props.meetup.name}</strong>
-
-              <h4>{this.state.datentime}</h4>
-            <div className="content" dangerouslySetInnerHTML={{__html: this.props.meetup.description}}></div>
-            <button onClick={(e)=>this.calendarAdd(e)}>Add to Calendar!</button>
-            </div>
+            <Paper style={styles.paper} zDepth={2}>
+              <div>
+                <strong>{this.props.meetup.name}</strong>
+                <h4>{this.state.datentime}</h4>
+                <div className="content" dangerouslySetInnerHTML={{__html: this.props.meetup.description}}></div>
+                <Button
+                  label={'add to calendar'}
+                  style={styles.addtocalendar}
+                  primary={false}
+                  secondary={true}
+                  onClick={(e)=>this.calendarAdd(e)}
+                />
+              </div>
+            </Paper>
           );
         }
 }

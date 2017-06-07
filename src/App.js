@@ -8,10 +8,10 @@ import {
   Redirect
 } from 'react-router-dom';
 import axios from 'axios';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import { VoicePlayer, VoiceRecognition } from "react-voice-components";
 // import Speech from 'react-speech';
 import CalendarPage from './components/CalendarPage';
-import GoalsPage from './components/GoalsPage';
 import JobsPage from './components/JobsPage';
 import ContactsPage from './components/ContactsPage';
 import FindMeetups from './components/FindMeetups';
@@ -19,13 +19,20 @@ import AddData from './components/AddData';
 import SendMail from './components/SendMail';
 import UploadFiles from './components/UploadFiles';
 import renderIf from 'render-if';
+import Button from './components/Button';
 import "./App.css";
 
 
 // var initializedSpeech = false;
 // var innerhtml = '';
 
-
+const styles = {
+  button: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+  }
+};
 
 
 
@@ -96,14 +103,6 @@ class App extends Component {
           return(
             <div>
               <UploadFiles/>
-            </div>
-          )
-        }
-
-        const xGoalsPagex = () => {
-          return(
-            <div>
-              <GoalsPage/>
             </div>
           )
         }
@@ -234,19 +233,6 @@ class App extends Component {
                   })
                 }
 
-                if (event.results[0][0].transcript==="go to goals"){
-                  console.log('attempting...');
-                  self.setState({
-                    redirect: "goals"
-                  }, ()=>{
-                    setTimeout(function(){
-                      self.setState({
-                        redirect: ""
-                      })
-                    },1000)
-                  })
-                }
-
                 if (event.results[0][0].transcript==="go to contacts"){
                   console.log('attempting...');
                   self.setState({
@@ -314,6 +300,7 @@ class App extends Component {
 
 
     return (
+      <MuiThemeProvider>
       <div className='container'>
         <Speechy/>
         <Router>
@@ -329,20 +316,155 @@ class App extends Component {
           </div>
 
             <nav className='tabs'>
-              <li><Link to="/FindMeetups">Find Meetups</Link></li>
-              <li><Link to="/CalendarPage">Platypus Calendar</Link></li>
-              <li><Link to="/GoalsPage">Platypus Goals</Link></li>
-              <li><Link to="/JobsPage">Platypus Jobs</Link></li>
-              <li><Link to="/ContactsPage">Platypus Contacts</Link></li>
-              <li><Link to="/AddData">Platypus Data Dashboard</Link></li>
-              <li><Link to="/SendMail">Email</Link></li>
-              <li><Link to="/UploadFiles">Upload Files</Link></li>
+
+              <Button
+                label={'Calendar'}
+                style={styles.button}
+                primary={false}
+                secondary={true}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "calendar"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+              <Button
+                label={'Meetups'}
+                style={styles.button}
+                primary={true}
+                secondary={false}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "meetups"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+              <Button
+                label={'Jobs'}
+                style={styles.button}
+                primary={true}
+                secondary={false}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "jobs"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+              <Button
+                label={'Contacts'}
+                style={styles.button}
+                primary={true}
+                secondary={false}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "contacts"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+              <Button
+                label={'Email'}
+                style={styles.button}
+                primary={true}
+                secondary={false}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "email"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+              <Button
+                label={'Upload'}
+                style={styles.button}
+                primary={true}
+                secondary={false}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "upload"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+              <Button
+                label={'Add to calendar'}
+                style={styles.button}
+                primary={true}
+                secondary={false}
+                onClick={(e)=>{
+                  e.preventDefault();
+                  var self = this;
+                  self.setState({
+                    redirect: "AddData"
+                  }, ()=>{
+                    setTimeout(function(){
+                      self.setState({
+                        redirect: ""
+                      })
+                    },50)
+                  })
+                }}
+              />
+
+
+
+
 
             </nav>
 
             <Route exact path="/" component={xCalendarPagex}/>
             <Route path="/CalendarPage" component={xCalendarPagex}/>
-            <Route path="/GoalsPage" component={xGoalsPagex}/>
             <Route path="/JobsPage" component={xJobsPagex}/>
             <Route path='/ContactsPage' component={xContactsPagex}/>
             <Route path='/FindMeetups' component={xFindMeetupsx}/>
@@ -364,9 +486,6 @@ class App extends Component {
             {renderIf(this.state.redirect === "jobs")(
               <Redirect to="/JobsPage" push/>
             )}
-            {renderIf(this.state.redirect === "goals")(
-              <Redirect to="/GoalsPage" push/>
-            )}
             {renderIf(this.state.redirect === "calendar")(
               <Redirect to="/CalendarPage" push/>
             )}
@@ -381,6 +500,7 @@ class App extends Component {
           </div>
         </Router>
       </div>
+      </MuiThemeProvider>
     );
   }
 }

@@ -2,8 +2,62 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ListJob from './ListJob';
 import ListJobBuilt from './ListJobBuilt';
+import TextField from 'material-ui/TextField';
+import Button from './Button';
 import renderIf from 'render-if';
+import Paper from 'material-ui/Paper';
 import ListSavedJob from './ListSavedJob';
+
+
+
+const styles = {
+  base: {
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
+  button: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    //not totally sure how to change colors SADPANDA
+    // backgroundColor: '#F3C677',
+    // labelColor: '#7B1E7A'
+  },
+  textInput: {
+    marginRight: '10px',
+    color: '#F3C677',
+  },
+  textInputInput: {
+    color: '#F3C677',
+  },
+  paper:{
+    height: "auto",
+    width: "80%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#F2DCB5',
+    display: 'inline-block',
+  },
+  showhide: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    width: '50%'
+  },
+  loadingContainer:{
+    backgroundColor: "#F3C677",
+    fontWeight: "bold",
+    width:"20%",
+    height: "auto",
+    color:  "#7B1E7A",
+    margin: "0 auto",
+    borderRadius: "10px",
+    padding: "10px"
+  }
+};
 
 class JobsPage extends Component {
   constructor(props){
@@ -17,7 +71,8 @@ class JobsPage extends Component {
       showSaved: false,
       showSearch: true,
       showSearchBuilt: true,
-      loading: false
+      loading: false,
+      haveSearched: false
     }
   }
 
@@ -90,7 +145,8 @@ class JobsPage extends Component {
       self.setState({
         searchResults: response.data.returnedJobs,
         searchResultsBuilt: response.data.returnedJobsBuilt,
-        loading: false
+        loading: false,
+        haveSearched: true
       })
     })
     .catch(()=>{
@@ -197,68 +253,124 @@ class JobsPage extends Component {
 
           return (
             <div>
-              <h1>Jobs Page</h1>
-              <h3>Search for Jobs!</h3>
-              <form>
-                <input
-                        onChange={(e)=>this.setState({searchTerm: e.target.value })}
-                        type="text"
-                        name="searchTerm"
-                        id="searchTerm"
-                        placeholder="search term"/>
-                <input
-                        onChange={(e)=>this.setState({searchCity: e.target.value })}
-                        type="text"
-                        name="searchCity"
-                        id="searchCity"
-                        placeholder="search city"/>
-                <button onClick={(e)=>this.searchJobs(e)}>Search!</button>
-                {renderIf(this.state.loading === true)(
-                  <div>
-                    <p>Loading!</p>
-                    <img className="loadingPlatypus" src='http://orig07.deviantart.net/e9e4/f/2015/145/5/b/5bfba23d515a76f42c3751d4b60dde64-d8uovty.gif'/>
-                  </div>
-                )}
-              </form>
+              <TextField
+                hintText="search term"
+                onChange={(e)=>this.setState({searchTerm: e.target.value })}
+                style={styles.textInput}
+                inputStyle={styles.textInputInput}
+              />
 
-              <div className="jobsList">
-                <h3>Listings from Indeed</h3>
-                {renderIf(this.state.showSearch === false)(
-                  <button onClick={(e)=>this.searchToggle(e)}>Show Jobs Listings</button>
-                )}
-                {renderIf(this.state.showSearch === true)(
-                  <div>
-                    <button onClick={(e)=>this.searchToggle(e)}>Hide Jobs Listings</button>
-                    {listJobs}
-                  </div>
-                )}
-              </div>
+              <TextField
+                hintText="search city"
+                onChange={(e)=>this.setState({searchCity: e.target.value })}
+                style={styles.textInput}
+                inputStyle={styles.textInputInput}
+              />
 
-              <div className="jobsList">
-                <h3>Listings from Built-In-Austin</h3>
-                {renderIf(this.state.showSearchBuilt === false)(
-                  <button onClick={(e)=>this.searchToggleBuilt(e)}>Show Jobs Listings</button>
-                )}
-                {renderIf(this.state.showSearchBuilt === true)(
-                  <div>
-                    <button onClick={(e)=>this.searchToggleBuilt(e)}>Hide Jobs Listings</button>
-                    {listJobsBuilt}
-                  </div>
-                )}
-              </div>
+              <Button
+                 label={'search'}
+                 style={styles.button}
+                 onClick={(e)=>this.searchJobs(e)}
+                 primary={true}
+               />
 
-              <div className="savedJobsList jobsList">
+               {renderIf(this.state.loading === true)(
+                 <Paper style={styles.loadingContainer} zDepth={2}>
+                   <p className="loadingText">Loading!</p>
+                   <img className="loadingPlatypus" src='http://orig07.deviantart.net/e9e4/f/2015/145/5/b/5bfba23d515a76f42c3751d4b60dde64-d8uovty.gif'/>
+                 </Paper>
+               )}
+
+
+               {renderIf(this.state.haveSearched === false)(
+                 <Paper style={styles.paper} zDepth={2}>
+                   <div>
+                     <strong>Search to display job listings from Indeed and Built-In-Austin</strong>
+                   </div>
+                 </Paper>
+               )}
+
+                {renderIf(this.state.haveSearched === true)(
+                  <Paper style={styles.paper} zDepth={2}>
+                    <h3>Listings from Indeed</h3>
+                  {renderIf(this.state.showSearch === false)(
+                    <Button
+                      label={'show'}
+                      style={styles.showhide}
+                      primary={false}
+                      secondary={true}
+                      onClick={(e)=>this.searchToggle(e)}
+                    />
+                  )}
+                  {renderIf(this.state.showSearch === true)(
+                    <div>
+                      <Button
+                        label={'hide'}
+                        style={styles.showhide}
+                        primary={false}
+                        secondary={true}
+                        onClick={(e)=>this.searchToggle(e)}
+                      />
+                      {listJobs}
+                    </div>
+                  )}
+                  </Paper>
+                )}
+
+
+
+                {renderIf(this.state.haveSearched === true)(
+                  <Paper style={styles.paper} zDepth={2}>
+                    <h3>Listings from Built-In-Austin</h3>
+                  {renderIf(this.state.showSearchBuilt === false)(
+                    <Button
+                      label={'show'}
+                      style={styles.showhide}
+                      primary={false}
+                      secondary={true}
+                      onClick={(e)=>this.searchToggleBuilt(e)}
+                    />
+                  )}
+                  {renderIf(this.state.showSearchBuilt === true)(
+                    <div>
+                      <Button
+                        label={'hide'}
+                        style={styles.showhide}
+                        primary={false}
+                        secondary={true}
+                        onClick={(e)=>this.searchToggleBuilt(e)}
+                      />
+                      {listJobsBuilt}
+                    </div>
+                  )}
+                  </Paper>
+                )}
+
+
+              <Paper style={styles.paper} zDepth={2}>
                 <h3>Platypus Saved Job Listings</h3>
                 {renderIf(this.state.showSaved === false)(
-                  <button onClick={(e)=>this.savedToggle(e)}>Show Saved Jobs</button>
+                  <Button
+                    label={'show'}
+                    style={styles.showhide}
+                    primary={false}
+                    secondary={true}
+                    onClick={(e)=>this.savedToggle(e)}
+                  />
                 )}
                 {renderIf(this.state.showSaved === true)(
                   <div>
-                    <button onClick={(e)=>this.savedToggle(e)}>Hide Saved Jobs</button>
+                    <Button
+                      label={'hide'}
+                      style={styles.showhide}
+                      primary={false}
+                      secondary={true}
+                      onClick={(e)=>this.savedToggle(e)}
+                    />
                     {listSavedJobs}
                   </div>
                 )}
-              </div>
+              </Paper>
 
             </div>
           );

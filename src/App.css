@@ -76,6 +76,24 @@
 .loadingPlatypus{
   height: 100px;
   width: auto;
+  border-radius: 10px;
+  border-width: medium;
+  border-style: solid;
+  border-color: #7B1E7A;
+}
+
+.loadingText{
+  margin-top: 5px;
+}
+
+.loadingContainer{
+  background-color: #F3C677;
+  font-weight: bold;
+  width:20%;
+  height: auto;
+  color:  #7B1E7A;
+  margin: 0 auto;
+  border-radius: 10px;
 }
 
 .contactsPageContainer{
