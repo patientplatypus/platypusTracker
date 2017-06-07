@@ -14,7 +14,7 @@ import CalendarPage from './components/CalendarPage';
 import GoalsPage from './components/GoalsPage';
 import JobsPage from './components/JobsPage';
 import ContactsPage from './components/ContactsPage';
-import WelcomePage from './components/WelcomePage';
+import FindMeetups from './components/FindMeetups';
 import AddData from './components/AddData';
 import SendMail from './components/SendMail';
 import UploadFiles from './components/UploadFiles';
@@ -124,10 +124,10 @@ class App extends Component {
           )
         }
 
-        const xWelcomePagex = () => {
+        const xFindMeetupsx = () => {
           return(
             <div>
-              <WelcomePage/>
+              <FindMeetups/>
             </div>
           )
         }
@@ -207,10 +207,10 @@ class App extends Component {
                   })
                 }
 
-                if (event.results[0][0].transcript==="go to welcome page"){
+                if (event.results[0][0].transcript==="go to meet ups"){
                   console.log('attempting...');
                   self.setState({
-                    redirect: "WelcomePage"
+                    redirect: "meetups"
                   }, ()=>{
                     setTimeout(function(){
                       self.setState({
@@ -329,7 +329,7 @@ class App extends Component {
           </div>
 
             <nav className='tabs'>
-              <li><Link to="/WelcomePage">Good Morning, Platypus</Link></li>
+              <li><Link to="/FindMeetups">Find Meetups</Link></li>
               <li><Link to="/CalendarPage">Platypus Calendar</Link></li>
               <li><Link to="/GoalsPage">Platypus Goals</Link></li>
               <li><Link to="/JobsPage">Platypus Jobs</Link></li>
@@ -340,12 +340,12 @@ class App extends Component {
 
             </nav>
 
-            <Route exact path="/" component={xWelcomePagex}/>
+            <Route exact path="/" component={xCalendarPagex}/>
             <Route path="/CalendarPage" component={xCalendarPagex}/>
             <Route path="/GoalsPage" component={xGoalsPagex}/>
             <Route path="/JobsPage" component={xJobsPagex}/>
             <Route path='/ContactsPage' component={xContactsPagex}/>
-            <Route path='/WelcomePage' component={xWelcomePagex}/>
+            <Route path='/FindMeetups' component={xFindMeetupsx}/>
             <Route path='/AddData' component={xAddDatax}/>
             <Route path='/SendMail' component={xSendMailx}/>
             <Route path='/UploadFiles' component={xUploadFilesx}/>
@@ -355,8 +355,8 @@ class App extends Component {
             {renderIf(this.state.redirect === "AddData")(
               <Redirect to="/AddData" push/>
             )}
-            {renderIf(this.state.redirect === "WelcomePage")(
-              <Redirect to="/WelcomePage" push/>
+            {renderIf(this.state.redirect === "meetups")(
+              <Redirect to="/FindMeetups" push/>
             )}
             {renderIf(this.state.redirect === "contacts")(
               <Redirect to="/ContactsPage" push/>

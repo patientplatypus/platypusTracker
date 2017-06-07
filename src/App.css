@@ -93,6 +93,11 @@
   background-color: #F3C677;
 }
 
+.checkbox{
+  display: inline;
+  float: left;
+}
+
 .calendar{
   display: inline-block;
   background: white;

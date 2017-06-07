@@ -85,61 +85,226 @@ router.post('/addtemplate', function(req,res,next){
 
 router.post('/delayedemail', function(req,res,next){
   console.log('top of delayedemail');
-  var date = new Date(2017,5,6,14,20,0);
   var requser = req.body.username;
   var reqpassword = req.body.password;
   var reqtext = req.body.text;
   var reqreceiver = req.body.receiver;
   var reqsubject = req.body.subject;
   var reqattachments = req.body.attachments;
+  var reqoneWeek = req.body.oneWeek;
+  var reqtwoWeek = req.body.twoWeek;
+  var reqthreeWeek = req.body.threeWeek;
+  var reqtoday = req.body.today
+  var reqfourWeek = req.body.fourWeek;
+  var reqoneWeekaheadDate = req.body.oneWeekaheadDate;
+  var reqtwoWeekaheadDate = req.body.twoWeekaheadDate;
+  var reqthreeWeekaheadDate = req.body.threeWeekaheadDate;
+  var reqfourWeekaheadDate = req.body.fourWeekaheadDate;
+  var jfired1 = false;
+  var jfired2 = false;
+  var jfired3 = false;
+  var jfired4 = false;
 
 
-  //
-  // var j = schedule.scheduleJob(date, function(){
-  //  console.log('The world is going to end today.');
-  // });
+  if (reqoneWeek){
+    var targetDate = new Date();
+    targetDate.setDate(targetDate.getDate()+7);
+    var date = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 12,0,0);
+    var j = schedule.scheduleJob(date, function(){
+        if(jfired1s === false){
+          console.log('now inside j delayedemail scheduler');
+          var email     = require("emailjs");
+          var server    = email.server.connect({
+           user:    requser,
+           password:reqpassword,
+           host:    "smtp.gmail.com",
+           port:    465,
+           ssl:     true
+         });
+
+          const attachmentArray = reqattachments.map((attachment) => {
+              var filetype = attachment.slice(-3);
+              if (filetype === "pdf") {
+                filetype = "application/pdf";
+              } else {
+                filetype = "image/"+filetype;
+              }
+
+              return {
+                  path: __dirname+"/uploads/"+attachment,
+                  type: filetype,
+                  name: attachment
+              }
+          })
+
+          server.send({
+             text:    reqtext,
+             from:    requser,
+             to:      reqreceiver,
+             subject: reqsubject,
+             cc: requser,
+             attachment: attachmentArray
+          }, function(err, message) {
+            // if (err) res.send('error from sending email');
+            //  res.send('email sent successfully');
+             jfired1 = true;
+           });
+         }
+      });
+
+  }
+
+  if (reqtwoWeek){
+
+    var targetDate = new Date();
+    targetDate.setDate(targetDate.getDate()+14);
+    var date = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 12,0,0);
+    var j = schedule.scheduleJob(date, function(){
+        if(jfired2 === false){
+          console.log('now inside j delayedemail scheduler');
+          var email     = require("emailjs");
+          var server    = email.server.connect({
+           user:    requser,
+           password:reqpassword,
+           host:    "smtp.gmail.com",
+           port:    465,
+           ssl:     true
+         });
+
+          const attachmentArray = reqattachments.map((attachment) => {
+              var filetype = attachment.slice(-3);
+              if (filetype === "pdf") {
+                filetype = "application/pdf";
+              } else {
+                filetype = "image/"+filetype;
+              }
+
+              return {
+                  path: __dirname+"/uploads/"+attachment,
+                  type: filetype,
+                  name: attachment
+              }
+          })
+
+          server.send({
+             text:    reqtext,
+             from:    requser,
+             to:      reqreceiver,
+             subject: reqsubject,
+             cc: requser,
+             attachment: attachmentArray
+          }, function(err, message) {
+            // if (err) res.send('error from sending email');
+            //  res.send('email sent successfully');
+             jfired2 = true;
+           });
+         }
+      });
+
+  }
 
 
+  if (reqthreeWeek){
 
-  var j = schedule.scheduleJob(date, function(){
-    console.log('now inside j delayedemail scheduler');
-    var email     = require("emailjs");
-    var server    = email.server.connect({
-     user:    requser,
-     password:reqpassword,
-     host:    "smtp.gmail.com",
-     port:    465,
-     ssl:     true
-   });
+    var targetDate = new Date();
+    targetDate.setDate(targetDate.getDate()+21);
+    var date = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 12,0,0);
+    var j = schedule.scheduleJob(date, function(){
+        if(jfired3 === false){
+          console.log('now inside j delayedemail scheduler');
+          var email     = require("emailjs");
+          var server    = email.server.connect({
+           user:    requser,
+           password:reqpassword,
+           host:    "smtp.gmail.com",
+           port:    465,
+           ssl:     true
+         });
 
-    const attachmentArray = reqattachments.map((attachment) => {
-        var filetype = attachment.slice(-3);
-        if (filetype === "pdf") {
-          filetype = "application/pdf";
-        } else {
-          filetype = "image/"+filetype;
-        }
+          const attachmentArray = reqattachments.map((attachment) => {
+              var filetype = attachment.slice(-3);
+              if (filetype === "pdf") {
+                filetype = "application/pdf";
+              } else {
+                filetype = "image/"+filetype;
+              }
 
-        return {
-            path: __dirname+"/uploads/"+attachment,
-            type: filetype,
-            name: attachment
-        }
-    })
+              return {
+                  path: __dirname+"/uploads/"+attachment,
+                  type: filetype,
+                  name: attachment
+              }
+          })
 
-    server.send({
-       text:    reqtext,
-       from:    requser,
-       to:      reqreceiver,
-       subject: reqsubject,
-       cc: requser,
-       attachment: attachmentArray
-    }, function(err, message) {
-      if (err) res.send('error from sending email');
-       res.send('email sent successfully');
+          server.send({
+             text:    reqtext,
+             from:    requser,
+             to:      reqreceiver,
+             subject: reqsubject,
+             cc: requser,
+             attachment: attachmentArray
+          }, function(err, message) {
+            // if (err) res.send('error from sending email');
+            //  res.send('email sent successfully');
+             jfired3 = true;
+           });
+         }
+      });
 
-     });
-  });
+  }
+
+
+  if (reqfourWeek){
+
+    var targetDate = new Date();
+    targetDate.setDate(targetDate.getDate()+28);
+    var date = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 12,0,0);
+    var j = schedule.scheduleJob(date, function(){
+        if(jfired4 === false){
+          console.log('now inside j delayedemail scheduler');
+          var email     = require("emailjs");
+          var server    = email.server.connect({
+           user:    requser,
+           password:reqpassword,
+           host:    "smtp.gmail.com",
+           port:    465,
+           ssl:     true
+         });
+
+          const attachmentArray = reqattachments.map((attachment) => {
+              var filetype = attachment.slice(-3);
+              if (filetype === "pdf") {
+                filetype = "application/pdf";
+              } else {
+                filetype = "image/"+filetype;
+              }
+
+              return {
+                  path: __dirname+"/uploads/"+attachment,
+                  type: filetype,
+                  name: attachment
+              }
+          })
+
+          server.send({
+             text:    reqtext,
+             from:    requser,
+             to:      reqreceiver,
+             subject: reqsubject,
+             cc: requser,
+             attachment: attachmentArray
+          }, function(err, message) {
+            // if (err) res.send('error from sending email');
+            //  res.send('email sent successfully');
+             jfired4 = true;
+           });
+         }
+      });
+  }
+
+  res.send('after if conditions in delayedemail');
+
+
 })
 
 

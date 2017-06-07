@@ -14,6 +14,7 @@ var jobs = require('./routes/jobs');
 var upload = require('./routes/upload');
 var email = require('./routes/email');
 var contacts = require('./routes/contacts');
+var meetups = require('./routes/meetups');
 var cors = require('cors');
 var app = express();
 
@@ -40,6 +41,7 @@ app.use('/contacts', contacts);
 app.use('/jobs', jobs);
 app.use('/email', email);
 app.use('/upload', upload);
+app.use('/meetups', meetups);
 
 
 // catch 404 and forward to error handler

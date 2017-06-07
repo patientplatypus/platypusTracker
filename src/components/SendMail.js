@@ -27,7 +27,11 @@ class SendMail extends Component {
       attachList:[],
       attachListcomma: '',
       savedJobtoEmail: {},
-      savedContacttoEmail: {}
+      savedContacttoEmail: {},
+      oneWeek: false,
+      twoWeek: false,
+      threeWeek: false,
+      fourWeek: false
     }
     var self = this;
   }
@@ -274,7 +278,7 @@ class SendMail extends Component {
   }
 
 
-  delayedEmailTest(e){
+  delayedEmail(e){
     e.preventDefault();
     var self = this;
 
@@ -286,6 +290,58 @@ class SendMail extends Component {
     var subject = this.state.subject;
     var receiver = this.state.receiver;
     var attachList = this.state.attachList;
+    var oneWeek = this.state.oneWeek;
+    var twoWeek = this.state.twoWeek;
+    var threeWeek = this.state.threeWeek;
+    var fourWeek = this.state.fourWeek;
+
+    var emailname = "to: " + receiver + " subject: " + subject;
+
+    var oneWeekaheadDate = new Date();
+    var twoWeekaheadDate = new Date();
+    var threeWeekaheadDate = new Date();
+    var threeWeekaheadDate = new Date();
+
+    if (oneWeek){
+      var targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 7);
+      var dd = targetDate.getDate();
+      var mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      var yyyy = targetDate.getFullYear();
+      var dateString = mm + "/" + dd + "/" + yyyy;
+      var oneWeekaheadDate = dateString;
+    }
+
+    if (twoWeek){
+      var targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 14);
+      var dd = targetDate.getDate();
+      var mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      var yyyy = targetDate.getFullYear();
+      var dateString = mm + "/" + dd + "/" + yyyy;
+      var twoWeekaheadDate = dateString;
+    }
+
+    if (threeWeek){
+      var targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 21);
+      var dd = targetDate.getDate();
+      var mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      var yyyy = targetDate.getFullYear();
+      var dateString = mm + "/" + dd + "/" + yyyy;
+      var threeWeekaheadDate = dateString;
+    }
+
+    if (fourWeek){
+      var targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 28);
+      var dd = targetDate.getDate();
+      var mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      var yyyy = targetDate.getFullYear();
+      var dateString = mm + "/" + dd + "/" + yyyy;
+      var fourWeekaheadDate = dateString;
+    }
+
 
     this.setState({
       username: "",
@@ -293,7 +349,11 @@ class SendMail extends Component {
       text: "",
       subject: "",
       receiver: "",
-      attachList:[]
+      attachList:[],
+      oneWeek: false,
+      twoWeek: false,
+      threeWeek: false,
+      fourWeek: false
     })
       axios.post('http://localhost:5000/email/delayedemail',{
         username: username,
@@ -301,10 +361,84 @@ class SendMail extends Component {
         text: text,
         subject: subject,
         receiver: receiver,
-        attachments: attachList
+        attachments: attachList,
+        oneWeek: oneWeek,
+        twoWeek: twoWeek,
+        threeWeek: threeWeek,
+        fourWeek: fourWeek,
+        oneWeekaheadDate: oneWeekaheadDate,
+        twoWeekaheadDate: twoWeekaheadDate,
+        threeWeekaheadDate: threeWeekaheadDate,
+        fourWeekaheadDate: fourWeekaheadDate,
       })
       .then((response)=>{
         console.log('inside the after delayedemail axios post in sendmail');
+
+
+        if (oneWeek){
+          axios.post('http://localhost:5000/calendar/addgoal',{
+            name: emailname,
+            dateDue: oneWeekaheadDate,
+            actionType: '***email***',
+            notes: text
+          })
+            .then((response)=>{
+              console.log("result from calendarAdd axios post IN EMAIL is ", response)
+            })
+            .catch(function(error){
+              console.error(error);
+            });
+        }
+
+        if (twoWeek){
+          axios.post('http://localhost:5000/calendar/addgoal',{
+            name: emailname,
+            dateDue: twoWeekaheadDate,
+            actionType: '***email***',
+            notes: text
+          })
+            .then((response)=>{
+              console.log("result from calendarAdd axios post IN EMAIL is ", response)
+            })
+            .catch(function(error){
+              console.error(error);
+            });
+        }
+
+        if (threeWeek){
+          axios.post('http://localhost:5000/calendar/addgoal',{
+            name: emailname,
+            dateDue: threeWeekaheadDate,
+            actionType: '***email***',
+            notes: text
+          })
+            .then((response)=>{
+              console.log("result from calendarAdd axios post IN EMAIL is ", response)
+            })
+            .catch(function(error){
+              console.error(error);
+            });
+        }
+
+
+        if (fourWeek){
+          axios.post('http://localhost:5000/calendar/addgoal',{
+            name: emailname,
+            dateDue: fourWeekaheadDate,
+            actionType: '***email***',
+            notes: text
+          })
+            .then((response)=>{
+              console.log("result from calendarAdd axios post IN EMAIL is ", response)
+            })
+            .catch(function(error){
+              console.error(error);
+            });
+        }
+
+
+
+
       });
   }
 
@@ -397,8 +531,68 @@ class SendMail extends Component {
                 </select>
                 <button onClick={(e)=>this.attachFile(e)}>Attach File!</button>
                 <button onClick={(e)=>this.sendMyEmail(e)}>Send Email!</button>
-                <button onClick={(e)=>this.delayedEmailTest(e)}>Delay Test</button>
+
+                  <p> Check the boxes for delayed emails </p>
+                  <div className="checkbox">
+                    <input type='checkbox' checked={this.state.oneWeek} onClick={()=>{
+                      if(this.state.oneWeek===false){
+                        this.setState({
+                          oneWeek:true
+                        })
+                      }
+                      if(this.state.oneWeek===true){
+                        this.setState({
+                          oneWeek:false
+                        })
+                      }
+                    }}/><p>Send An Email in a Week</p>
+                  </div>
+                  <div className="checkbox">
+                    <input className="checkbox" checked={this.state.twoWeek} type='checkbox' onClick={()=>{
+                      if(this.state.twoWeek===false){
+                        this.setState({
+                          twoWeek:true
+                        })
+                      }
+                      if(this.state.twoWeek===true){
+                        this.setState({
+                          twoWeek:false
+                        })
+                      }
+                    }}/><p className="checkbox">Send An Email in Two Weeks</p>
+                  </div>
+                  <div className="checkbox">
+                    <input className="checkbox"  checked={this.state.threeWeek} type='checkbox' onClick={()=>{
+                      if(this.state.threeWeek===false){
+                        this.setState({
+                          threeWeek:true
+                        })
+                      }
+                      if(this.state.threeWeek===true){
+                        this.setState({
+                          threeWeek:false
+                        })
+                      }
+                    }}/><p className="checkbox">Send An Email in Three Weeks</p>
+                  </div>
+                  <div className="checkbox">
+                    <input className="checkbox"  checked={this.state.fourWeek} type='checkbox' onClick={()=>{
+                      if(this.state.fourWeek===false){
+                        this.setState({
+                          fourWeek:true
+                        })
+                      }
+                      if(this.state.fourWeek===true){
+                        this.setState({
+                          fourWeek:false
+                        })
+                      }
+                    }}/><p className="checkbox">Send An Email in Four Weeks</p>
+                  </div>
+                  <button onClick={(e)=>this.delayedEmail(e)}>Send Delayed Email!</button>
               </form>
+
+
 
 
 

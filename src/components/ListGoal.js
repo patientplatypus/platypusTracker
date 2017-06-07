@@ -80,7 +80,7 @@ class ListGoal extends Component {
 
           return (
             <div>
-              {renderIf(this.props.goal.actionType != "***email***")(
+              {renderIf((this.props.goal.actionType != "***email***")&&(this.props.goal.actionType !="***meetup***"))(
                 <div className="GoalsDue">
                    <strong>{this.props.goal.name}</strong> - {this.props.goal.location} <p> {this.props.goal.notes} </p>
                    <button onClick={(e)=>this.deleteItem(e)}>Delete Item!</button>
@@ -96,6 +96,14 @@ class ListGoal extends Component {
                   <h3>{this.props.goal.name}</h3>
                   <h4>Here is what you wrote:</h4>
                   <p>{this.props.goal.notes}</p>
+                  <button onClick={(e)=>this.deleteItem(e)}>Remove Email From Calendar!</button>
+                </div>
+              )}
+              {renderIf(this.props.goal.actionType === "***meetup***")(
+                <div className="GoalsDue">
+                  <h3>{this.props.goal.name}</h3>
+                  <div className="content" dangerouslySetInnerHTML={{__html: this.props.goal.notes}}></div>
+                  <button onClick={(e)=>this.deleteItem(e)}>Remove meetup From Calendar!</button>
                 </div>
               )}
             </div>
