@@ -4,6 +4,124 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import renderIf from 'render-if';
 import ListTemplate from './ListTemplate';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import Button from './Button';
+import {orange500, blue500} from 'material-ui/styles/colors';
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Dropzone from 'react-dropzone';
+import request from 'superagent';
+
+// <Checkbox
+//   label="Simple"
+//   style={styles.checkbox}
+// />
+
+const styles = {
+  base: {
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
+  button: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    marginLeft: "10px"
+    //not totally sure how to change colors SADPANDA
+    // backgroundColor: '#F3C677',
+    // labelColor: '#7B1E7A'
+  },
+  textInput: {
+    marginRight: '10px',
+    color: "#F3C677",
+    // #F3C677
+  },
+  textInputInput: {
+    color: "#F3C677",
+    // #F3C677
+  },
+  textInput2:{
+    marginRight: '10px',
+    marginLeft: "10px",
+    color: "#7A4E79",
+    width: "90%"
+  },
+  textInputInput2:{
+    color: "#7A4E79",
+    padding:"10px",
+    width: "90%"
+  },
+  h4:{
+    color: "#7A4E79",
+  },
+  paper:{
+    height: "auto",
+    width: "80%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#F2CC8A',
+    display: 'inline-block',
+  },
+  orangepaper:{
+    height: "auto",
+    width: "80%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#F2A521',
+    display: 'inline-block',
+  },
+  purplepaper:{
+    height: "auto",
+    width: "60%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#7A5079',
+    display: 'inline-block',
+  },
+  select:{
+    width: "80%",
+    verticalAlign: "bottom"
+  },
+  checkbox:{
+    width:"200px",
+    height:"auto",
+    fontSize:"15px",
+    fontWeight:"bold",
+    display:"inline-block",
+    float:'left'
+  },
+  showhide: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    width: '50%'
+  },
+  loadingContainer:{
+    backgroundColor: "#F3C677",
+    fontWeight: "bold",
+    width:"20%",
+    height: "auto",
+    color:  "#7B1E7A",
+    margin: "0 auto",
+    borderRadius: "10px",
+    padding: "10px"
+  }
+};
 
 class SendMail extends Component {
   constructor(props){
@@ -31,7 +149,9 @@ class SendMail extends Component {
       oneWeek: false,
       twoWeek: false,
       threeWeek: false,
-      fourWeek: false
+      fourWeek: false,
+      templatesRetrieved: false,
+      values: []
     }
     var self = this;
   }
@@ -197,7 +317,8 @@ class SendMail extends Component {
               arryAll.push(tempObj);
             });
             self.setState({
-              templateResults: arryAll
+              templateResults: arryAll,
+              templatesRetrieved: true
             });
           });
      this.forceUpdate();
@@ -225,7 +346,8 @@ class SendMail extends Component {
               arryAll.push(tempObj);
             });
             self.setState({
-              templateResults: arryAll
+              templateResults: arryAll,
+              templatesRetrieved: true
             });
           });
      this.forceUpdate();
@@ -235,8 +357,11 @@ class SendMail extends Component {
   attachFile(e){
     e.preventDefault();
     var self = this;
-    if (self.state.optionState!="please select a file"){
-      const attachList = self.state.attachList.concat(self.state.optionState);
+    if (self.state.values!="please select a file"){
+      const attachList = self.state.attachList.concat(self.state.values);
+      self.setState({
+        values: []
+      })
       self.setState({attachList},()=>{
         console.log('value of attachList after setting ', this.state.attachList);
         const attachListcomma = this.state.attachList.join(', ')
@@ -276,6 +401,25 @@ class SendMail extends Component {
       })
     }
   }
+
+  toggleRetrievedTemplates(e){
+    e.preventDefault();
+
+    var self = this;
+
+    if(self.state.templatesRetrieved===false){
+      self.setState({
+        templatesRetrieved: true
+      })
+    }
+
+    if(self.state.templatesRetrieved===true){
+      self.setState({
+        templatesRetrieved: false
+      })
+    }
+  }
+
 
 
   delayedEmail(e){
@@ -443,18 +587,78 @@ class SendMail extends Component {
   }
 
 
-  render() {
+  handleOptionState(e){
+    e.preventDefault();
+    console.log('inside handleOptionState');
+    console.log('right before setting optionState and its value is ', this.state.optionState);
+    this.setState({
+      optionState: e.target.value
+    },()=>{
+      console.log('after setting optionState and the value of optionstate is ', this.state.optionState);
+    })
+  }
 
-    let option = [];
-    option.push(<option key={0} value="please select">please select a file</option>)
-    var key = 1;
-    console.log('this.state.uploadList in render ', this.state.uploadList);
-    this.state.uploadList.map(item => {
-        option.push(<option key={key} value={item}>{item}</option>)
-        key++;
-      }
-    );
-    console.log('value of options after map ', option);
+  menuItems(menuValues) {
+    return this.state.uploadList.map((name) => (
+      <MenuItem
+        key={name}
+        insetChildren={true}
+        checked={menuValues && menuValues.indexOf(name) > -1}
+        value={name}
+        primaryText={name}
+      />
+    ));
+  }
+
+  menuItems(values) {
+  return this.state.uploadList.map((name) => (
+    <MenuItem
+      key={name}
+      insetChildren={true}
+      checked={values && values.indexOf(name) > -1}
+      value={name}
+      primaryText={name}
+    />
+  ));
+}
+
+
+
+ handleSelectChange = (event, index, values) => this.setState({values, attachList: []});
+
+  render() {
+    const {values} = this.state;
+  // option.push(<option key={key} value={item}>{item}</option>)
+  // option.push(<option key={0} value="please select">please select a file</option>)
+  //  <MenuItem value={1} primaryText="Never" />
+  // <select
+  // onChange={(e)=>this.setState({optionState:e.target.value})}>
+  //   {option}
+  // </select>
+
+//   menuItems(values) {
+//   return names.map((name) => (
+//     <MenuItem
+//       key={name}
+//       insetChildren={true}
+//       checked={values && values.indexOf(name) > -1}
+//       value={name}
+//       primaryText={name}
+//     />
+//   ));
+// }
+
+
+    // let option = [];
+    // option.push(<MenuItem value={"please select"} primaryText="please select a file"/>)
+    // var key = 1;
+    // console.log('this.state.uploadList in render ', this.state.uploadList);
+    // this.state.uploadList.map(item => {
+    //     option.push(<MenuItem value={item} primaryText={item}/>)
+    //     key++;
+    //   }
+    // );
+    // console.log('value of options after map ', option);
 
 
 
@@ -482,191 +686,286 @@ class SendMail extends Component {
             });
       }
       if(this.state.templateResults.length===0){
-        listTemplates = <div><p> Search for templates to populate! If there are none, add some! </p></div>
+        // listTemplates = <div><p> Search for templates to populate! If there are none, add some! </p></div>
       }
 
           return (
             <div>
-              <h1>Send Mail!</h1>
 
-              <form>
-                <input
-                        onChange={(e)=>this.setState({username: e.target.value })}
-                        type="text"
-                        name="username"
-                        id="username"
-                        value={this.state.username}
-                        placeholder="username"/>
-                <input
-                        onChange={(e)=>this.setState({password: e.target.value })}
-                        type="text"
-                        name="password"
-                        id="password"
-                        value={this.state.password}
-                        placeholder="password"/>
-                <input
-                        onChange={(e)=>this.setState({receiver: e.target.value })}
-                        type="text"
-                        name="receiver"
-                        id="receiver"
-                        value={this.state.receiver}
-                        placeholder="receiver"/>
-                <input
-                        onChange={(e)=>this.setState({subject: e.target.value })}
-                        type="text"
-                        name="subject"
-                        id="subject"
-                        value={this.state.subject}
-                        placeholder="subject"/>
-                <textarea rows="4" cols="50"
-                        onChange={(e)=>this.setState({text: e.target.value })}
-                        name="text"
-                        id="text"
-                        value={this.state.text}
-                        placeholder="text"
-                ></textarea>
-                <select
-                onChange={(e)=>this.setState({optionState:e.target.value})}>
-                  {option}
-                </select>
-                <button onClick={(e)=>this.attachFile(e)}>Attach File!</button>
-                <button onClick={(e)=>this.sendMyEmail(e)}>Send Email!</button>
-
-                  <p> Check the boxes for delayed emails </p>
-                  <div className="checkbox">
-                    <input type='checkbox' checked={this.state.oneWeek} onClick={()=>{
-                      if(this.state.oneWeek===false){
-                        this.setState({
-                          oneWeek:true
-                        })
-                      }
-                      if(this.state.oneWeek===true){
-                        this.setState({
-                          oneWeek:false
-                        })
-                      }
-                    }}/><p>Send An Email in a Week</p>
-                  </div>
-                  <div className="checkbox">
-                    <input className="checkbox" checked={this.state.twoWeek} type='checkbox' onClick={()=>{
-                      if(this.state.twoWeek===false){
-                        this.setState({
-                          twoWeek:true
-                        })
-                      }
-                      if(this.state.twoWeek===true){
-                        this.setState({
-                          twoWeek:false
-                        })
-                      }
-                    }}/><p className="checkbox">Send An Email in Two Weeks</p>
-                  </div>
-                  <div className="checkbox">
-                    <input className="checkbox"  checked={this.state.threeWeek} type='checkbox' onClick={()=>{
-                      if(this.state.threeWeek===false){
-                        this.setState({
-                          threeWeek:true
-                        })
-                      }
-                      if(this.state.threeWeek===true){
-                        this.setState({
-                          threeWeek:false
-                        })
-                      }
-                    }}/><p className="checkbox">Send An Email in Three Weeks</p>
-                  </div>
-                  <div className="checkbox">
-                    <input className="checkbox"  checked={this.state.fourWeek} type='checkbox' onClick={()=>{
-                      if(this.state.fourWeek===false){
-                        this.setState({
-                          fourWeek:true
-                        })
-                      }
-                      if(this.state.fourWeek===true){
-                        this.setState({
-                          fourWeek:false
-                        })
-                      }
-                    }}/><p className="checkbox">Send An Email in Four Weeks</p>
-                  </div>
-                  <button onClick={(e)=>this.delayedEmail(e)}>Send Delayed Email!</button>
-              </form>
-
-
-
-
-
-              {renderIf(this.state.attachList.length===0)(
-                <div>
-                  <p>You have no files attached!</p>
-                </div>
-              )}
-              {renderIf(this.state.attachList.length!=0)(
-                <div>
-                  <p>You have attached these files:</p>{this.state.attachListcomma}
-                </div>
-              )}
-
-
-
+              <Paper style={styles.purplepaper} zDepth={2}>
+                <TextField
+                  hintText="username"
+                  onChange={(e)=>this.setState({username: e.target.value })}
+                  value={this.state.username}
+                  style={styles.textInput}
+                  inputStyle={styles.textInputInput}
+                />
+                <TextField
+                  hintText="password"
+                  onChange={(e)=>this.setState({password: e.target.value })}
+                  value={this.state.password}
+                  type="password"
+                  style={styles.textInput}
+                  inputStyle={styles.textInputInput}
+                /><br/>
+                <hr/>
+                <TextField
+                  hintText="receiver"
+                  onChange={(e)=>this.setState({receiver: e.target.value })}
+                  value={this.state.receiver}
+                  style={styles.textInput}
+                  inputStyle={styles.textInputInput}
+                />
+                <TextField
+                  hintText="subject"
+                  onChange={(e)=>this.setState({subject: e.target.value })}
+                  value={this.state.subject}
+                  style={styles.textInput}
+                  inputStyle={styles.textInputInput}
+                /><br/>
+                <hr/>
+                <TextField
+                  floatingLabelText="email body"
+                  onChange={(e)=>this.setState({text: e.target.value })}
+                  value={this.state.text}
+                  style={styles.textInput}
+                  textareaStyle={styles.textInputInput}
+                  multiLine={true}
+                  fullWidth={true}
+                  rows={5}
+                  /><br/>
+              </Paper>
               <br/>
-              {renderIf(this.state.toggleMakeTemplate)(
-                <div className='templateMakerDiv toggleTemplate'>
-                  <h1>Make New Mail Template!</h1>
 
-                  <form className="templateMakerForm">
-                    <textarea rows="10" cols="100"
-                            onChange={(e)=>this.setState({templateBody: e.target.value })}
-                            name="text"
-                            id="text"
-                            value={this.state.templateBody}
-                            placeholder="text"
-                    ></textarea>
-                    <button onClick={(e)=>this.createTemplate(e)}>create this template!</button>
-                    <button onClick={(e)=>this.sendTemplatetoEmailForm(e)}>send this template to email form!</button>
-                  </form>
 
-                    <button onClick={(e)=>this.toggleTemplateMaker(e)}>Hide Template Maker!</button>
-                </div>
-              )}
 
+              <Paper style={styles.purplepaper} zDepth={2}>
+                <SelectField
+                  multiple={true}
+                  style={styles.select}
+                  hintText="attach files"
+                  value={values}
+                  onChange={this.handleSelectChange}
+                >
+                  {this.menuItems(values)}
+                </SelectField>
+
+                <Button
+                   label={'attach'}
+                   style={styles.button}
+                   onClick={(e)=>this.attachFile(e)}
+                   primary={true}
+                 /><br/>
+
+                 {renderIf(this.state.attachList.length===0)(
+                   <div>
+                     <p>You have no files attached!</p>
+                   </div>
+                 )}
+                 {renderIf(this.state.attachList.length!=0)(
+                   <div>
+                     <p>You have attached these files: {this.state.attachListcomma} </p>
+                   </div>
+                 )}
+
+               </Paper>
+               <br/>
+
+
+
+               <Paper style={styles.purplepaper} zDepth={2}>
+                 <Checkbox
+                   label="Email in a Week"
+                   style={styles.checkbox}
+                   checked={this.state.oneWeek}
+                   onCheck={()=>{
+                     if(this.state.oneWeek===false){
+                       this.setState({
+                         oneWeek:true
+                       })
+                     }
+                     if(this.state.oneWeek===true){
+                       this.setState({
+                         oneWeek:false
+                       })
+                     }
+                   }}
+                 />
+                 <Checkbox
+                   label="Email in 2 Weeks"
+                   style={styles.checkbox}
+                   checked={this.state.twoWeek}
+                   onCheck={()=>{
+                     if(this.state.twoWeek===false){
+                       this.setState({
+                         twoWeek:true
+                       })
+                     }
+                     if(this.state.twoWeek===true){
+                       this.setState({
+                         twoWeek:false
+                       })
+                     }
+                   }}
+                 />
+                 <Checkbox
+                   label="Email in 3 Weeks"
+                   style={styles.checkbox}
+                   checked={this.state.threeWeek}
+                   onCheck={()=>{
+                     if(this.state.threeWeek===false){
+                       this.setState({
+                         threeWeek:true
+                       })
+                     }
+                     if(this.state.threeWeek===true){
+                       this.setState({
+                         threeWeek:false
+                       })
+                     }
+                   }}
+                 />
+                 <Checkbox
+                   label="Email in 4 Weeks"
+                   style={styles.checkbox}
+                   checked={this.state.fourWeek}
+                   onCheck={()=>{
+                     if(this.state.fourWeek===false){
+                       this.setState({
+                         fourWeek:true
+                       })
+                     }
+                     if(this.state.fourWeek===true){
+                       this.setState({
+                         fourWeek:false
+                       })
+                     }
+                   }}
+                 /><br/>
+
+
+               </Paper>
+
+               <Paper style={styles.purplepaper} zDepth={2}>
+                   {renderIf(this.state.oneWeek||this.state.twoWeek||this.state.threeWeek||this.state.fourWeek)(
+                     <Button
+                        label={'send delayed email'}
+                        style={styles.button}
+                        onClick={(e)=>this.delayedEmail(e)}
+                        secondary={true}
+                      />
+                  )}
+                  {renderIf(!(this.state.oneWeek||this.state.twoWeek||this.state.threeWeek||this.state.fourWeek))(
+                    <Button
+                       label={'send email'}
+                       style={styles.button}
+                       onClick={(e)=>this.sendMyEmail(e)}
+                       secondary={true}
+                     />
+                  )}
+               </Paper>
+              <br/>
+
+
+
+              <Paper style={styles.orangepaper} zDepth={2}>
               {renderIf(this.state.toggleMakeTemplate===false)(
-                  <button className="toggleTemplate" onClick={(e)=>this.toggleTemplateMaker(e)}>Show Template Maker!</button>
+                <Button
+                   label={'show template maker'}
+                   style={styles.button}
+                   onClick={(e)=>this.toggleTemplateMaker(e)}
+                   primary={true}
+                 />
               )}
 
+              {renderIf(this.state.toggleMakeTemplate)(
+                <div>
+                  <h4 style={styles.h4}>Make New Mail Template!</h4>
 
+                  <TextField
+                    floatingLabelText="template body"
+                    onChange={(e)=>this.setState({templateBody: e.target.value })}
+                    value={this.state.templateBody}
+                    style={styles.textInput2}
+                    textareaStyle={styles.textInputInput2}
+                    multiLine={true}
+                    fullWidth={true}
+                    rows={5}
+                    /><br/>
+
+                    <Button
+                       label={'hide template maker'}
+                       style={styles.button}
+                       onClick={(e)=>this.toggleTemplateMaker(e)}
+                       primary={true}
+                     />
+                    <Button
+                       label={'create template'}
+                       style={styles.button}
+                       onClick={(e)=>this.createTemplate(e)}
+                       primary={true}
+                     />
+                     <Button
+                        label={'send template to email form'}
+                        style={styles.button}
+                        onClick={(e)=>this.sendTemplatetoEmailForm(e)}
+                        secondary={true}
+                      />
+                </div>
+              )}
+              </Paper>
               <br/>
-              <button onClick={(e)=>this.retrieveTemplates(e)}>retrieve saved templates!</button>
 
-
-
-
-              <br/>
-              <div className='savedJobsList jobListing jobsList'>
-                {listTemplates}
-              </div>
-
+              <Paper style={styles.orangepaper} zDepth={2}>
+                {renderIf(!this.state.templatesRetrieved)(
+                  <Button
+                     label={'show saved templates'}
+                     style={styles.button}
+                     onClick={(e)=>{
+                       this.toggleRetrievedTemplates(e)
+                       this.retrieveTemplates(e)
+                     }}
+                     primary={true}
+                   />
+                )}
+                {renderIf(this.state.templatesRetrieved)(
+                  <div>
+                  <Button
+                     label={'hide templates'}
+                     style={styles.button}
+                     onClick={(e)=>this.toggleRetrievedTemplates(e)}
+                     primary={true}
+                   />
+                   <br/>
+                     {listTemplates}
+                   </div>
+                )}
+              </Paper>
               <br/>
 
               {renderIf(this.state.savedJobtoEmail.hasOwnProperty("jobTitle"))(
-                <div className='savedJobsList jobListing jobsList'>
+                 <Paper style={styles.orangepaper} zDepth={2}>
                   <h2>This saved Job was sent to email!</h2>
                   <h3><strong>{this.state.savedJobtoEmail.jobTitle}</strong></h3>
                   <h4>{this.state.savedJobtoEmail.jobLink}</h4>
                   <h4>{this.state.savedJobtoEmail.companyName}</h4>
                   <h4>{this.state.savedJobtoEmail.jobLocation}</h4>
                   <h4>{this.state.savedJobtoEmail.jobDescription}</h4>
-                  <h3>job status: {this.state.savedJobtoEmail.jobStatus}</h3>
-                  <button onClick={(e)=>this.removeSavedJob(e)}>Remove Saved Job from Email!</button>
-                </div>
+                  <Button
+                     label={'Remove job'}
+                     style={styles.button}
+                     onClick={(e)=>this.removeSavedJob(e)}
+                     primary={true}
+                   />
+                </Paper>
               )}
 
               {renderIf(this.state.savedContacttoEmail.hasOwnProperty("name"))(
-                <div className='savedJobsList jobListing jobsList'>
+                <Paper style={styles.orangepaper} zDepth={2}>
                   <h2>This Contact was sent to email!</h2>
                   <h3>Here are your notes on this guy :D</h3>
                   <h4>{this.state.savedContacttoEmail.notes}</h4>
-                </div>
+                </Paper>
               )}
 
             </div>

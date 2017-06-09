@@ -29,6 +29,17 @@ const styles = {
   textInputInput: {
     color: '#F3C677',
   },
+  purplepaper:{
+    height: "auto",
+    width: "90%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#7A5079',
+    display: 'inline-block',
+  },
   paper:{
     height: "auto",
     width: "80%",
@@ -102,7 +113,7 @@ class ListMeetup extends Component {
 
   render() {
           return (
-            <Paper style={styles.paper} zDepth={2}>
+            <Paper style={styles.purplepaper} zDepth={2}>
               <div>
                 <strong>{this.props.meetup.name}</strong>
                 <h4>{this.state.datentime}</h4>

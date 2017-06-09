@@ -43,5 +43,22 @@ router.post('/allcontactinfo', function(req,res,next){
 });
 
 
+router.delete('/deleteContact/:delete_id',function(req,res,next){
+  console.log("inside delete method");
+  console.log('value of req.params.delete_id is', req.params.delete_id);
+
+  Contacts.remove({
+           _id: req.params.delete_id
+       }, function(err, contact) {
+           if (err)
+               res.send(err);
+
+           res.json({ message: 'Successfully deleted',
+                      post: contact});
+       });
+  });
+
+
+
 
 module.exports = router;

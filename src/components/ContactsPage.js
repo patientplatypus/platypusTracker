@@ -3,6 +3,77 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ListContact from './ListContact';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import Button from './Button';
+import {orange500, blue500} from 'material-ui/styles/colors';
+import renderIf from 'render-if';
+
+
+
+const styles = {
+  base: {
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
+  button: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    //not totally sure how to change colors SADPANDA
+    // backgroundColor: '#F3C677',
+    // labelColor: '#7B1E7A'
+  },
+  textInput: {
+    marginRight: '10px',
+    color: "#F3C677",
+    // #F3C677
+  },
+  textInputInput: {
+    color: "#F3C677",
+    // #F3C677
+  },
+  paper:{
+    height: "auto",
+    width: "80%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#F2DCB5',
+    display: 'inline-block',
+  },
+  purplepaper:{
+    height: "auto",
+    width: "40%",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#7A5079',
+    display: 'inline-block',
+  },
+  showhide: {
+    marginTop: '6px',
+    marginRight: '10px',
+    marginBottom: '6px',
+    width: '50%'
+  },
+  loadingContainer:{
+    backgroundColor: "#F3C677",
+    fontWeight: "bold",
+    width:"20%",
+    height: "auto",
+    color:  "#7B1E7A",
+    margin: "0 auto",
+    borderRadius: "10px",
+    padding: "10px"
+  }
+};
+
+
 
 
 class ContactsPage extends Component {
@@ -17,7 +88,8 @@ class ContactsPage extends Component {
       github: "",
       notes: "",
       contactResults: [],
-      searchTerm: ""
+      searchTerm: "",
+      anyDisplayed: true
     }
   }
 
@@ -37,6 +109,7 @@ class ContactsPage extends Component {
               tempObj.phone = contact.phone;
               tempObj.github = contact.github;
               tempObj.notes = contact.notes;
+              tempObj._id = contact._id;
 
               arryAll.push(tempObj);
             });
@@ -62,6 +135,7 @@ class ContactsPage extends Component {
               tempObj.phone = contact.phone;
               tempObj.github = contact.github;
               tempObj.notes = contact.notes;
+              tempObj._id = contact._id;
 
               arryAll.push(tempObj);
             });
@@ -117,49 +191,58 @@ class ContactsPage extends Component {
               listContacts = this.state.contactResults.map((contact,i) => {
                 return (
                   <ListContact key={i} contact={contact}
+                    getContactsInfo={this.getContactsInfo.bind(this)}
                     sendSavedContacttoEmail={this.props.sendSavedContacttoEmail.bind(this)}/>
                 );
               });
         }
 
-        if(this.state.contactResults.length===0){
-          // console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
-          listContacts = <div><p>Add contacts to populate!</p></div>
-        }
+        // if(this.state.contactResults.length===0){
+        //   // console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
+        //   listContacts = <div><p>Add contacts to populate!</p></div>
+        // }
     }else{
       if(this.state.contactResults.length!=0){
+        var displayEverTrue = false;
         console.log("this.state.contactResults ", this.state.contactResults);
 
-        listContacts = this.state.contactResults.map((contact,i)=>{
+            listContacts = this.state.contactResults.map((contact,i)=>{
+              console.log("contact.name ", contact.name);
+              var displayItem = false;
 
-          console.log("contact.name ", contact.name);
-          var displayItem = false;
-
-          for(var y=0; y<this.state.searchTerm.length; y++){
-            if(y<contact.name.length){
-              if(this.state.searchTerm[y]===contact.name[y]){
-                displayItem = true;
-              }else{
-                displayItem = false;
+              for(var y=0; y<this.state.searchTerm.length; y++){
+                if(y<contact.name.length){
+                  if(this.state.searchTerm[y]===contact.name[y]){
+                    displayItem = true;
+                  }else{
+                    displayItem = false;
+                  }
+                }else{
+                  displayItem = false;
+                }
               }
-            }else{
-              displayItem = false;
-            }
-          }
+
+              if (displayItem === true){
+                console.log('inside displayItem true');
+                displayEverTrue=true;
+                return(
+                  <ListContact key={i} contact={contact} getContactsInfo={this.getContactsInfo.bind(this)}
+                  sendSavedContacttoEmail={this.props.sendSavedContacttoEmail.bind(this)}/>
+                );
+              }
+              if(displayEverTrue===false && (i === this.state.contactResults.length-1)){
+                return(
+                   <Paper style={styles.purplepaper} zDepth={2}><p>No Contacts Found</p></Paper>
+                );
+              }
+
+          });
 
 
-          // var filteredNames = contact.name.filter((el)=>{
-          //   el.toLowerCase().indexOf(this.state.searchTerm.toLowerCase())>-1
-          // });
 
-          if (displayItem === true){
-            console.log('inside displayItem true');
-            return(
-              <ListContact key={i} contact={contact}/>
-            );
-          }
 
-        });
+
+
 
 
         // var filteredNames = this.state.contactResults.name.filter((el) =>
@@ -176,87 +259,93 @@ class ContactsPage extends Component {
 
       }
 
-      if(this.state.contactResults.length===0){
-        // console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
-        listContacts = <div><p>Add contacts to populate!</p></div>
-      }
+      // if(this.state.contactResults.length===0){
+      //   // console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
+      //   listContacts=<Paper style={styles.purplepaper} zDepth={2}><p>No Contacts Found</p></Paper>
+      // }
     }
+// className='contactsPageContainer'
+  // <div className="addForm Container">
+  // <h1>Contacts</h1>
+  // <h3>Add Contact!</h3>
+
+
+
+
 
           return (
-            <div className='contactsPageContainer'>
-              <h1>Contacts</h1>
-              <h3>Add Contact!</h3>
-              <div className="addForm Container">
-                <form>
-                  <input
-                          onChange={(e)=>this.setState({name: e.target.value })}
-                          type="text"
-                          name="name"
-                          value={this.state.name}
-                          id="name"
-                          placeholder="name"/>
-                  <input
-                          onChange={(e)=>this.setState({profilePic: e.target.value })}
-                          type="text"
-                          name="profilePic"
-                          value={this.state.profilePic}
-                          id="profilePic"
-                          placeholder="profilePic"/>
-                  <input
-                          onChange={(e)=>this.setState({linkedIn: e.target.value })}
-                          type="text"
-                          name="linkedIn"
-                          value={this.state.linkedIn}
-                          id="linkedIn"
-                          placeholder="linkedIn"/>
-                  <input
-                          onChange={(e)=>this.setState({email: e.target.value })}
-                          type="text"
-                          name="email"
-                          value={this.state.email}
-                          id="email"
-                          placeholder="email"/>
-                  <input
-                          onChange={(e)=>this.setState({phone: e.target.value })}
-                          type="text"
-                          name="phone"
-                          value={this.state.phone}
-                          id="phone"
-                          placeholder="phone"/>
-                  <input
-                          onChange={(e)=>this.setState({github: e.target.value })}
-                          type="text"
-                          name="github"
-                          value={this.state.github}
-                          id="github"
-                          placeholder="github"/>
-                  <textarea rows="4" cols="50"
-                          onChange={(e)=>this.setState({notes: e.target.value })}
-                          name="notes"
-                          value={this.state.notes}
-                          id="notes"
-                          placeholder="notes"
-                  ></textarea>
-                  <button onClick={(e)=>this.contactAdd(e)}>Add Contact!</button>
+            <div>
+            <Paper style={styles.purplepaper} zDepth={2}>
+                  <TextField
+                    hintText="name"
+                    onChange={(e)=>this.setState({name: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    hintText="profile picture"
+                    onChange={(e)=>this.setState({profilePic: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    hintText="linkedIn"
+                    onChange={(e)=>this.setState({linkedIn: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    hintText="email"
+                    onChange={(e)=>this.setState({email: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    hintText="phone"
+                    onChange={(e)=>this.setState({phone: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    hintText="github"
+                    onChange={(e)=>this.setState({github: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    hintText="linkedIn"
+                    onChange={(e)=>this.setState({linkedIn: e.target.value })}
+                    style={styles.textInput}
+                    inputStyle={styles.textInputInput}
+                  /><br/>
+                  <TextField
+                    floatingLabelText="notes"
+                    onChange={(e)=>this.setState({notes: e.target.value })}
+                    style={styles.textInput}
+                    textareaStyle={styles.textInputInput}
+                    multiLine={true}
+                    rows={5}
+                    /><br/>
+                  <Button
+                     label={'add contact'}
+                     style={styles.button}
+                     onClick={(e)=>this.contactAdd(e)}
+                     primary={true}
+                   /><br/>
 
-                    <br/>
-                    <hr/>
+                    <TextField
+                      hintText="search contacts"
+                      onChange={(e)=>this.setState({searchTerm: e.target.value })}
+                      style={styles.textInput}
+                      inputStyle={styles.textInputInput}
+                    /><br/>
+              </Paper>
 
-                      <input
-                              onChange={(e)=>this.setState({searchTerm: e.target.value })}
-                              type="text"
-                              name="searchTerm"
-                              id="searchTerm"
-                              placeholder="search contacts"/>
+              <br/>
 
-                </form>
-              </div>
-
-
-
-              <div className='contactsContainer'>
+              <Paper style={styles.paper} zDepth={2}>
                 {listContacts}
-              </div>
+              </Paper>
 
             </div>
           );

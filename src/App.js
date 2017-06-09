@@ -131,13 +131,6 @@ class App extends Component {
           )
         }
 
-        const xAddDatax = () => {
-          return(
-            <div>
-              <AddData/>
-            </div>
-          )
-        }
 
         const xSendMailx = () => {
           return(
@@ -193,18 +186,7 @@ class App extends Component {
                   speechSynthesis.speak(u);
                 }
 
-                if (event.results[0][0].transcript==="go to data"){
-                  console.log('attempting...');
-                  self.setState({
-                    redirect: "AddData"
-                  }, ()=>{
-                    setTimeout(function(){
-                      self.setState({
-                        redirect: ""
-                      })
-                    },1000)
-                  })
-                }
+
 
                 if (event.results[0][0].transcript==="go to meet ups"){
                   console.log('attempting...');
@@ -437,25 +419,7 @@ class App extends Component {
                 }}
               />
 
-              <Button
-                label={'Add to calendar'}
-                style={styles.button}
-                primary={true}
-                secondary={false}
-                onClick={(e)=>{
-                  e.preventDefault();
-                  var self = this;
-                  self.setState({
-                    redirect: "AddData"
-                  }, ()=>{
-                    setTimeout(function(){
-                      self.setState({
-                        redirect: ""
-                      })
-                    },50)
-                  })
-                }}
-              />
+
 
 
 
@@ -468,15 +432,12 @@ class App extends Component {
             <Route path="/JobsPage" component={xJobsPagex}/>
             <Route path='/ContactsPage' component={xContactsPagex}/>
             <Route path='/FindMeetups' component={xFindMeetupsx}/>
-            <Route path='/AddData' component={xAddDatax}/>
             <Route path='/SendMail' component={xSendMailx}/>
             <Route path='/UploadFiles' component={xUploadFilesx}/>
 
 
 
-            {renderIf(this.state.redirect === "AddData")(
-              <Redirect to="/AddData" push/>
-            )}
+
             {renderIf(this.state.redirect === "meetups")(
               <Redirect to="/FindMeetups" push/>
             )}

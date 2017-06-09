@@ -41,6 +41,19 @@ const styles = {
     backgroundColor: '#F2DCB5',
     display: 'inline-block',
   },
+  purplepaper:{
+      height: "auto",
+      width: "auto",
+      paddingLeft: "20px",
+      paddingTop: "5px",
+      paddingBottom: "5px",
+      paddingRight: "20px",
+      textAlign: 'center',
+      marginTop: '10px',
+      marginBottom: '10px',
+      backgroundColor: '#7A5079',
+      display: 'inline-block',
+    },
   showhide: {
     marginTop: '6px',
     marginRight: '10px',
@@ -253,6 +266,7 @@ class JobsPage extends Component {
 
           return (
             <div>
+              <Paper style={styles.purplepaper} zDepth={2}>
               <TextField
                 hintText="search term"
                 onChange={(e)=>this.setState({searchTerm: e.target.value })}
@@ -273,6 +287,7 @@ class JobsPage extends Component {
                  onClick={(e)=>this.searchJobs(e)}
                  primary={true}
                />
+              </Paper>
 
                {renderIf(this.state.loading === true)(
                  <Paper style={styles.loadingContainer} zDepth={2}>

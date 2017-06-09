@@ -29,6 +29,19 @@ const styles = {
   textInputInput: {
     color: '#F3C677',
   },
+  purplepaper:{
+    height: "auto",
+    width: "auto",
+    paddingLeft: "20px",
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    paddingRight: "20px",
+    textAlign: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#7A5079',
+    display: 'inline-block',
+  },
   paper:{
     height: "auto",
     width: "80%",
@@ -105,7 +118,7 @@ class FindMeetups extends Component {
 
           return (
             <div>
-
+            <Paper style={styles.purplepaper} zDepth={2}>
               <TextField
                 hintText="keyword search"
                 onChange={(e)=>this.setState({searchTerm: e.target.value })}
@@ -118,7 +131,8 @@ class FindMeetups extends Component {
                  onClick={(e)=>this.searchMeetups(e)}
                  primary={true}
                />
-
+             </Paper>
+             <br/>
                {renderIf((this.state.searched === true)&&(this.state.meetupArray.length===0))(
                  <Paper style={styles.paper} zDepth={2}>
                    <div>
@@ -136,7 +150,9 @@ class FindMeetups extends Component {
                  </Paper>
                )}
 
-              {listMeetups}
+               <Paper style={styles.paper} zDepth={2}>
+                {listMeetups}
+               </Paper>
             </div>
           );
         }
