@@ -73,7 +73,7 @@ const styles = {
   },
   purplepaper:{
     height: "auto",
-    width: "60%",
+    width: "80%",
     paddingLeft: "5px",
     paddingRight: "5px",
     textAlign: 'center',
@@ -324,7 +324,7 @@ class CalendarPage extends Component {
     }
     if(this.state.goalsToday==="nogoals"){
       console.log("this.state.goalsToday if is (second condition)", this.state.goalsToday);
-      listGoals = <div className="GoalsDue"><p>You have nothing due today!</p></div>
+      listGoals = <Paper style={styles.orangepaper} zDepth={2}><p>You have nothing due today!</p></Paper>
     }
 
     const dialogActions = [
@@ -432,7 +432,12 @@ class CalendarPage extends Component {
                <Button
                   label={'add to calendar'}
                   style={styles.button}
-                  onClick={(e)=>this.calendarAdd(e)}
+                  onClick={(e)=>{
+                    this.setState({
+                      selectedDay:null,
+                      goalsToday:"nogoals"
+                    })
+                    this.calendarAdd(e)}}
                   secondary={true}
                 />
                  <Button
@@ -444,9 +449,9 @@ class CalendarPage extends Component {
              </Dialog>
 
 
-            <div className="goalsList">
+            <Paper style={styles.purplepaper} zDepth={2}>
                 {listGoals}
-            </div>
+            </Paper>
 
           </div>
         );

@@ -192,11 +192,11 @@ nav {
   display: inline-block;
   text-align: center;
   margin: 0 auto;
-  background: tomato;
 }
 
 .dropZoneinner{
   display: inline-block;
+  background-color: '#F2A521',
 }
 
 .headerContainer{

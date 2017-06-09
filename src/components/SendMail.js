@@ -17,6 +17,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import Dialog from 'material-ui/Dialog';
+
 
 // <Checkbox
 //   label="Simple"
@@ -82,6 +84,15 @@ const styles = {
     backgroundColor: '#F2A521',
     display: 'inline-block',
   },
+  dropzone: {
+    backgroundColor: '#F2A521',
+    height: "400px",
+    width: "400px",
+    borderStyle: "dashed",
+    borderColor: "black",
+    marginTop: '5px',
+    borderWidth: "10px"
+  },
   purplepaper:{
     height: "auto",
     width: "60%",
@@ -93,9 +104,21 @@ const styles = {
     backgroundColor: '#7A5079',
     display: 'inline-block',
   },
+  purplepaper2:{
+      height: "auto",
+      width: "60%",
+      paddingLeft: "130px",
+      paddingRight: "5px",
+      textAlign: 'center',
+      marginTop: '10px',
+      marginBottom: '10px',
+      backgroundColor: '#7A5079',
+      display: 'inline-block',
+    },
   select:{
-    width: "80%",
-    verticalAlign: "bottom"
+    width: "78.5%",
+    verticalAlign: "bottom",
+    float: "left"
   },
   checkbox:{
     width:"200px",
@@ -120,6 +143,12 @@ const styles = {
     margin: "0 auto",
     borderRadius: "10px",
     padding: "10px"
+  },
+  imgFromFile:{
+    postion:'absolute',
+    width:'auto',
+    height:'300',
+    textAlign: 'center'
   }
 };
 
@@ -151,7 +180,8 @@ class SendMail extends Component {
       threeWeek: false,
       fourWeek: false,
       templatesRetrieved: false,
-      values: []
+      values: [],
+      imgFromFile: false
     }
     var self = this;
   }
@@ -192,6 +222,23 @@ class SendMail extends Component {
 
   }
 
+
+  forceUpdateUploads(e){
+    e.preventDefault();
+    var self = this;
+    this.setState({
+      openDropBox:false
+    })
+
+      axios.get('http://localhost:5000/upload/getall')
+        .then((response)=>{
+          console.log('back from upload/getall', response.data);
+          const uploadList = self.state.uploadList.concat(response.data);
+          self.setState({uploadList});
+        })
+
+    this.forceUpdate();
+  }
 
 
 
@@ -622,6 +669,47 @@ class SendMail extends Component {
   ));
 }
 
+  onDrop(files){
+    var self = this;
+    var file = new FormData();
+    file.append('name',files[0]);
+    // console.log('the value of files[0] is ', files[0].name);
+    var req=request
+              .post('http://localhost:5000/upload/')
+              .send(file);
+    req.end((err,response)=>{
+        console.log("upload done!!!!!");
+        console.log('value of response from onDrop is ', response.body);
+        // retrieveFile(file);
+
+        var self = this;
+         self.setState({
+              imgFromFile: true
+            },()=>{
+              var canvas = document.getElementById("mainCanvas");
+              var ctx = canvas.getContext("2d");
+              var img = new Image();
+              img.onload = function () {
+                ctx.clearRect(0, 0, 200, 200);
+                ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
+                    0, 0, canvas.width, canvas.height); // destination rectangle
+              }
+              img.src="http://localhost:5000/upload/getsinglefile/"+files[0].name;
+              setTimeout(()=>{
+                self.setState({
+                  imgFromFile:false
+                })
+              },1500)
+        })
+
+
+    });
+  }
+
+ //  retrieveFile(file){
+ //
+ // }
+
 
 
  handleSelectChange = (event, index, values) => this.setState({values, attachList: []});
@@ -754,8 +842,14 @@ class SendMail extends Component {
                    label={'attach'}
                    style={styles.button}
                    onClick={(e)=>this.attachFile(e)}
-                   primary={true}
-                 /><br/>
+                   secondary={true}
+                 />
+                 <Button
+                    label={'upload'}
+                    style={styles.button}
+                    onClick={(e)=>this.setState({openDropBox: true})}
+                    primary={true}
+                  /><br/>
 
                  {renderIf(this.state.attachList.length===0)(
                    <div>
@@ -773,7 +867,7 @@ class SendMail extends Component {
 
 
 
-               <Paper style={styles.purplepaper} zDepth={2}>
+               <Paper style={styles.purplepaper2} zDepth={2}>
                  <Checkbox
                    label="Email in a Week"
                    style={styles.checkbox}
@@ -967,6 +1061,41 @@ class SendMail extends Component {
                   <h4>{this.state.savedContacttoEmail.notes}</h4>
                 </Paper>
               )}
+
+
+              <Dialog
+                 modal={true}
+                 bodyStyle={{
+                    padding: '0px',
+                    paddingTop: '0px',
+                    textAlign: 'center',
+                    backgroundColor: '#7A5079'
+                 }}
+                 open={this.state.openDropBox}
+               >
+               <div>
+               <div className="dropZone">
+                 <div className='dropZoneinner'>
+                   <Dropzone style={styles.dropzone} onDrop={this.onDrop.bind(this)}>
+                     <div>Try dropping some files here, or click to select files to upload.
+                     {renderIf(this.state.imgFromFile === true)(
+                       <div>
+                         <canvas id="mainCanvas" width="auto" height="300"></canvas>
+                       </div>
+                     )}
+                     </div>
+                   </Dropzone>
+                 </div>
+               </div>
+               <Button
+                  label={'close'}
+                  style={styles.button}
+                  onClick={(e)=>this.forceUpdateUploads(e)}
+                  primary={true}
+                /><br/>
+                </div>
+
+              </Dialog>
 
             </div>
           );

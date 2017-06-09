@@ -254,18 +254,7 @@ class App extends Component {
                   })
                 }
 
-                if (event.results[0][0].transcript==="go to upload"){
-                  console.log('attempting...');
-                  self.setState({
-                    redirect: "upload"
-                  }, ()=>{
-                    setTimeout(function(){
-                      self.setState({
-                        redirect: ""
-                      })
-                    },1000)
-                  })
-                }
+
 
             };
 
@@ -399,26 +388,6 @@ class App extends Component {
                 }}
               />
 
-              <Button
-                label={'Upload'}
-                style={styles.button}
-                primary={true}
-                secondary={false}
-                onClick={(e)=>{
-                  e.preventDefault();
-                  var self = this;
-                  self.setState({
-                    redirect: "upload"
-                  }, ()=>{
-                    setTimeout(function(){
-                      self.setState({
-                        redirect: ""
-                      })
-                    },50)
-                  })
-                }}
-              />
-
 
 
 
@@ -433,7 +402,7 @@ class App extends Component {
             <Route path='/ContactsPage' component={xContactsPagex}/>
             <Route path='/FindMeetups' component={xFindMeetupsx}/>
             <Route path='/SendMail' component={xSendMailx}/>
-            <Route path='/UploadFiles' component={xUploadFilesx}/>
+
 
 
 
@@ -453,9 +422,7 @@ class App extends Component {
             {renderIf(this.state.redirect === "email")(
               <Redirect to="/SendMail" push/>
             )}
-            {renderIf(this.state.redirect === "upload")(
-              <Redirect to="/UploadFiles" push/>
-            )}
+
 
 
           </div>
