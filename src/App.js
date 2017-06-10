@@ -55,6 +55,17 @@ class App extends Component {
   // }
 
 
+  removeJobandContact(){
+    var self = this;
+    self.setState({
+      savedJobtoEmail: {},
+      savedContacttoEmail: {},
+    })
+  }
+
+
+
+
   sendSavedJobtoEmail(savedJob){
     var self = this;
     self.setState({
@@ -137,7 +148,8 @@ class App extends Component {
             <div>
               <SendMail savedJobtoEmail={this.state.savedJobtoEmail} savedContacttoEmail={this.state.savedContacttoEmail}
               updatedJob={this.state.updatedJob}
-              updatedEmail={this.state.updatedEmail}/>
+              updatedEmail={this.state.updatedEmail}
+              removeJobandContact={this.removeJobandContact.bind(this)}/>
             </div>
           )
         }

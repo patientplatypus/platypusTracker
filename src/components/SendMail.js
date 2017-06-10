@@ -180,6 +180,7 @@ class SendMail extends Component {
       threeWeek: false,
       fourWeek: false,
       templatesRetrieved: false,
+      removeContact:false,
       values: [],
       imgFromFile: false
     }
@@ -215,6 +216,7 @@ class SendMail extends Component {
             text:'Dear '+ this.props.savedContacttoEmail.name + ', ',
             receiver:this.props.savedContacttoEmail.email,
             updatedJob: false,
+            removeContact: false,
             updatedEmail: true
           })
         }
@@ -711,6 +713,12 @@ class SendMail extends Component {
  // }
 
 
+ handleremoveJobandContact(e){
+   e.preventDefault();
+   this.props.removeJobandContact();
+ }
+
+
 
  handleSelectChange = (event, index, values) => this.setState({values, attachList: []});
 
@@ -1048,7 +1056,7 @@ class SendMail extends Component {
                   <Button
                      label={'Remove job'}
                      style={styles.button}
-                     onClick={(e)=>this.removeSavedJob(e)}
+                     onClick={(e)=>this.handleremoveJobandContact(e)}
                      primary={true}
                    />
                 </Paper>
@@ -1059,9 +1067,19 @@ class SendMail extends Component {
                   <h2>This Contact was sent to email!</h2>
                   <h3>Here are your notes on this guy :D</h3>
                   <h4>{this.state.savedContacttoEmail.notes}</h4>
+                  <br/>
                   {renderIf(this.state.savedContacttoEmail.profilePic!='')(
+                    <div>
                     <img src={this.state.savedContacttoEmail.profilePic}/>
+                    <br/>
+                    </div>
                   )}
+                  <Button
+                     label={'Remove contact'}
+                     style={styles.button}
+                     onClick={(e)=>this.handleremoveJobandContact(e)}
+                     primary={true}
+                   />
                 </Paper>
               )}
 
