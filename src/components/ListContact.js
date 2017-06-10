@@ -123,7 +123,7 @@ class ListContact extends Component {
                   label={'delete'}
                   style={styles.button}
                   onClick={(e)=>this.deleteContact(e)}
-                  secondary={true}
+                  primary={true}
                 />
             </Paper>
           );
