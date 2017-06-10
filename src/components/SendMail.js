@@ -1005,14 +1005,8 @@ class SendMail extends Component {
                        label={'create template'}
                        style={styles.button}
                        onClick={(e)=>this.createTemplate(e)}
-                       primary={true}
+                       secondary={true}
                      />
-                     <Button
-                        label={'send template to email form'}
-                        style={styles.button}
-                        onClick={(e)=>this.sendTemplatetoEmailForm(e)}
-                        secondary={true}
-                      />
                 </div>
               )}
               </Paper>
