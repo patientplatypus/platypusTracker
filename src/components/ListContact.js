@@ -105,6 +105,9 @@ class ListContact extends Component {
           return (
             <Paper style={styles.purplepaper} zDepth={2}>
               <h4><strong>{this.props.contact.name}</strong></h4>
+              {renderIf(this.props.contact.profilePic!='')(
+                <img src={this.props.contact.profilePic}/>
+              )}
               <p>{this.props.contact.linkedIn}</p>
               <p>{this.props.contact.email}</p>
               <p>{this.props.contact.phone}</p>

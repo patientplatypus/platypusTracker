@@ -10,6 +10,11 @@ import TextField from 'material-ui/TextField';
 import Button from './Button';
 import Dialog from 'material-ui/Dialog';
 
+
+// for google maps
+// key=AIzaSyBKSMaMwm7UTigL5sZGHS2VA0JUfghcSI4
+
+
 const styles = {
   base: {
     marginTop: '10px',

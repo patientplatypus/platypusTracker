@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Paper from 'material-ui/Paper';
 import Button from './Button';
-
+import renderIf from 'render-if';
 
 const styles = {
   base: {
@@ -59,11 +59,13 @@ class ListMeetup extends Component {
     super(props);
     this.state={
       datentime: "",
+      renderlocation: false,
       datestring: "",
     }
   }
 
   componentWillMount(){
+    var self = this;
     var utcSeconds = this.props.meetup.time;
     var targetDate = new Date(utcSeconds);
     var dd = targetDate.getDate();
@@ -77,6 +79,12 @@ class ListMeetup extends Component {
       datentime: datentime,
       datestring: datestring
     })
+
+    if(this.props.meetup.hasOwnProperty('venue')){
+        this.setState({
+          renderlocation: true
+        })
+    }
   }
 // <h4>{this.props.meetup.venue.address_1}</h4>
 
@@ -84,13 +92,19 @@ class ListMeetup extends Component {
     e.preventDefault();
 
     var self = this;
+    var location;
+    if(this.state.renderlocation){
+      location = this.props.meetup.venue.address_1;
+    }else{
+      location = "no location available";
+    }
 
     axios.post('http://localhost:5000/calendar/addgoal', {
       name: this.props.meetup.name,
       actionType: "***meetup***",
       notes: this.props.meetup.description,
       dateDue: this.state.datestring,
-      // location: this.state.location
+      location: location
     })
       .then((response)=>{
         console.log("result from calendarAdd axios post is ", response)
@@ -110,13 +124,29 @@ class ListMeetup extends Component {
       });
   }
 
+  // {renderIf(typeof this.props.meetup.venue != 'null')(
+  //   <h4>Location: {this.props.meetup.venue.address_1}</h4>
+  // )}
 
   render() {
+
+          const LocationDisplay = ()=>{
+            if(this.state.renderlocation){
+              return <h4>Location: {this.props.meetup.venue.address_1}</h4>
+            }else{
+              return <div></div>
+            }
+          }
+
+
+
           return (
             <Paper style={styles.purplepaper} zDepth={2}>
               <div>
+                <br/>
                 <strong>{this.props.meetup.name}</strong>
                 <h4>{this.state.datentime}</h4>
+                <LocationDisplay/>
                 <div className="content" dangerouslySetInnerHTML={{__html: this.props.meetup.description}}></div>
                 <Button
                   label={'add to calendar'}

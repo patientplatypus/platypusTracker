@@ -279,48 +279,49 @@ class ContactsPage extends Component {
                   <TextField
                     hintText="name"
                     onChange={(e)=>this.setState({name: e.target.value })}
+                    value = {this.state.name}
                     style={styles.textInput}
                     inputStyle={styles.textInputInput}
                   /><br/>
                   <TextField
                     hintText="profile picture"
                     onChange={(e)=>this.setState({profilePic: e.target.value })}
+                    value = {this.state.profilePic}
                     style={styles.textInput}
                     inputStyle={styles.textInputInput}
                   /><br/>
                   <TextField
                     hintText="linkedIn"
                     onChange={(e)=>this.setState({linkedIn: e.target.value })}
+                    value = {this.state.linkedIn}
                     style={styles.textInput}
                     inputStyle={styles.textInputInput}
                   /><br/>
                   <TextField
                     hintText="email"
                     onChange={(e)=>this.setState({email: e.target.value })}
+                    value = {this.state.email}
                     style={styles.textInput}
                     inputStyle={styles.textInputInput}
                   /><br/>
                   <TextField
                     hintText="phone"
                     onChange={(e)=>this.setState({phone: e.target.value })}
+                    value = {this.state.phone}
                     style={styles.textInput}
                     inputStyle={styles.textInputInput}
                   /><br/>
                   <TextField
                     hintText="github"
                     onChange={(e)=>this.setState({github: e.target.value })}
-                    style={styles.textInput}
-                    inputStyle={styles.textInputInput}
-                  /><br/>
-                  <TextField
-                    hintText="linkedIn"
-                    onChange={(e)=>this.setState({linkedIn: e.target.value })}
+                    value = {this.state.github}
                     style={styles.textInput}
                     inputStyle={styles.textInputInput}
                   /><br/>
                   <TextField
                     floatingLabelText="notes"
                     onChange={(e)=>this.setState({notes: e.target.value })}
+                    value = {this.state.notes}
                     style={styles.textInput}
                     textareaStyle={styles.textInputInput}
                     multiLine={true}

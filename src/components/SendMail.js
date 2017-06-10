@@ -1059,6 +1059,9 @@ class SendMail extends Component {
                   <h2>This Contact was sent to email!</h2>
                   <h3>Here are your notes on this guy :D</h3>
                   <h4>{this.state.savedContacttoEmail.notes}</h4>
+                  {renderIf(this.state.savedContacttoEmail.profilePic!='')(
+                    <img src={this.state.savedContacttoEmail.profilePic}/>
+                  )}
                 </Paper>
               )}
 

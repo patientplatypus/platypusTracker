@@ -93,8 +93,7 @@ class ListSavedJob extends Component {
               <Button
                 label={'delete job'}
                 style={styles.handlesavedjob}
-                primary={false}
-                secondary={true}
+                primary={true}
                 onClick={(e)=>this.deleteSavedJob(e)}
               />
               <br/>

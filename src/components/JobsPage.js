@@ -312,8 +312,7 @@ class JobsPage extends Component {
                     <Button
                       label={'show'}
                       style={styles.showhide}
-                      primary={false}
-                      secondary={true}
+                      primary={true}
                       onClick={(e)=>this.searchToggle(e)}
                     />
                   )}
@@ -322,8 +321,7 @@ class JobsPage extends Component {
                       <Button
                         label={'hide'}
                         style={styles.showhide}
-                        primary={false}
-                        secondary={true}
+                        primary={true}
                         onClick={(e)=>this.searchToggle(e)}
                       />
                       {listJobs}
@@ -341,8 +339,7 @@ class JobsPage extends Component {
                     <Button
                       label={'show'}
                       style={styles.showhide}
-                      primary={false}
-                      secondary={true}
+                      primary={true}
                       onClick={(e)=>this.searchToggleBuilt(e)}
                     />
                   )}
@@ -351,8 +348,7 @@ class JobsPage extends Component {
                       <Button
                         label={'hide'}
                         style={styles.showhide}
-                        primary={false}
-                        secondary={true}
+                        primary={true}
                         onClick={(e)=>this.searchToggleBuilt(e)}
                       />
                       {listJobsBuilt}
@@ -368,8 +364,7 @@ class JobsPage extends Component {
                   <Button
                     label={'show'}
                     style={styles.showhide}
-                    primary={false}
-                    secondary={true}
+                    primary={true}
                     onClick={(e)=>this.savedToggle(e)}
                   />
                 )}
@@ -378,8 +373,7 @@ class JobsPage extends Component {
                     <Button
                       label={'hide'}
                       style={styles.showhide}
-                      primary={false}
-                      secondary={true}
+                      primary={true}
                       onClick={(e)=>this.savedToggle(e)}
                     />
                     {listSavedJobs}
