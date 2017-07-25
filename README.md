@@ -13,7 +13,7 @@ The email page is the really cool part. It allows you to send delayed emails, ad
 
 As one nifty side feature you can navigate by voice command. Try saying 'go to calendar' when you are on a different tab!
 
-##How to run
+## How to run
 
 1. Clone the repo
 
@@ -25,7 +25,7 @@ As one nifty side feature you can navigate by voice command. Try saying 'go to c
 
 5. Go to the front end in the browser!
 
-##Screen Shots of it in Action
+## Screen Shots of it in Action
 
 Here is a picture of the calendar page
 
