@@ -144,7 +144,7 @@ class ModifyGoal extends Component {
 
     var self = this;
 
-    axios.patch('http://localhost:5000/calendar/modifygoal', {
+    axios.patch('http://limitless-badlands-52386.herokuapp.com/calendar/modifygoal', {
       id: this.state.goal._id,
       name: this.state.name,
       notes: this.state.notes,

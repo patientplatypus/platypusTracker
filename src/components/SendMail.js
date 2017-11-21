@@ -191,7 +191,7 @@ class SendMail extends Component {
 
     var self = this;
 
-      axios.get('http://localhost:5000/upload/getall')
+      axios.get('http://limitless-badlands-52386.herokuapp.com/upload/getall')
         .then((response)=>{
           console.log('back from upload/getall', response.data);
           const uploadList = self.state.uploadList.concat(response.data);
@@ -232,7 +232,7 @@ class SendMail extends Component {
       openDropBox:false
     })
 
-      axios.get('http://localhost:5000/upload/getall')
+      axios.get('http://limitless-badlands-52386.herokuapp.com/upload/getall')
         .then((response)=>{
           console.log('back from upload/getall', response.data);
           const uploadList = self.state.uploadList.concat(response.data);
@@ -272,7 +272,7 @@ class SendMail extends Component {
       receiver: "",
       attachList:[]
     })
-      axios.post('http://localhost:5000/email/sendemail',{
+      axios.post('http://limitless-badlands-52386.herokuapp.com/email/sendemail',{
         username: username,
         password: password,
         text: text,
@@ -283,7 +283,7 @@ class SendMail extends Component {
       .then((response)=>{
         console.log('inside the after sendemail axios post in sendmail');
 
-        axios.post('http://localhost:5000/calendar/addgoal',{
+        axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal',{
           name: emailname,
           dateDue: today,
           actionType: '***email***',
@@ -305,7 +305,7 @@ class SendMail extends Component {
   createTemplate(e){
     e.preventDefault(e);
     var self = this;
-    axios.post('http://localhost:5000/email/addtemplate',{
+    axios.post('http://limitless-badlands-52386.herokuapp.com/email/addtemplate',{
       body: this.state.templateBody,
     })
     .then((response)=>{
@@ -335,7 +335,7 @@ class SendMail extends Component {
 
   deleteTemplate(template){
     var self = this;
-    var url = 'http://localhost:5000/email/deleteItem/' + template._id;
+    var url = 'http://limitless-badlands-52386.herokuapp.com/email/deleteItem/' + template._id;
 
     axios.delete(url)
       .then((response)=>{
@@ -354,7 +354,7 @@ class SendMail extends Component {
   retrieveTemplatesNoE(){
 
     var self = this;
-      axios.post('http://localhost:5000/email/retrievetemplates')
+      axios.post('http://limitless-badlands-52386.herokuapp.com/email/retrievetemplates')
         .then((response)=>{
             var arryAll = [];
             var tempObj = {};
@@ -383,7 +383,7 @@ class SendMail extends Component {
     e.preventDefault();
 
     var self = this;
-      axios.post('http://localhost:5000/email/retrievetemplates')
+      axios.post('http://limitless-badlands-52386.herokuapp.com/email/retrievetemplates')
         .then((response)=>{
             var arryAll = [];
             var tempObj = {};
@@ -548,7 +548,7 @@ class SendMail extends Component {
       threeWeek: false,
       fourWeek: false
     })
-      axios.post('http://localhost:5000/email/delayedemail',{
+      axios.post('http://limitless-badlands-52386.herokuapp.com/email/delayedemail',{
         username: username,
         password: password,
         text: text,
@@ -569,7 +569,7 @@ class SendMail extends Component {
 
 
         if (oneWeek){
-          axios.post('http://localhost:5000/calendar/addgoal',{
+          axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal',{
             name: emailname,
             dateDue: oneWeekaheadDate,
             actionType: '***email***',
@@ -584,7 +584,7 @@ class SendMail extends Component {
         }
 
         if (twoWeek){
-          axios.post('http://localhost:5000/calendar/addgoal',{
+          axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal',{
             name: emailname,
             dateDue: twoWeekaheadDate,
             actionType: '***email***',
@@ -599,7 +599,7 @@ class SendMail extends Component {
         }
 
         if (threeWeek){
-          axios.post('http://localhost:5000/calendar/addgoal',{
+          axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal',{
             name: emailname,
             dateDue: threeWeekaheadDate,
             actionType: '***email***',
@@ -615,7 +615,7 @@ class SendMail extends Component {
 
 
         if (fourWeek){
-          axios.post('http://localhost:5000/calendar/addgoal',{
+          axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal',{
             name: emailname,
             dateDue: fourWeekaheadDate,
             actionType: '***email***',
@@ -677,7 +677,7 @@ class SendMail extends Component {
     file.append('name',files[0]);
     // console.log('the value of files[0] is ', files[0].name);
     var req=request
-              .post('http://localhost:5000/upload/')
+              .post('http://limitless-badlands-52386.herokuapp.com/upload/')
               .send(file);
     req.end((err,response)=>{
         console.log("upload done!!!!!");
@@ -696,7 +696,7 @@ class SendMail extends Component {
                 ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
                     0, 0, canvas.width, canvas.height); // destination rectangle
               }
-              img.src="http://localhost:5000/upload/getsinglefile/"+files[0].name;
+              img.src="http://limitless-badlands-52386.herokuapp.com/upload/getsinglefile/"+files[0].name;
               setTimeout(()=>{
                 self.setState({
                   imgFromFile:false

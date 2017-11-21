@@ -26,7 +26,7 @@ class AddData extends Component {
 
     var self = this;
 
-    axios.post('http://localhost:5000/calendar/addgoal', {
+    axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal', {
       name: this.state.name,
       actionType: this.state.actionType,
       notes: this.state.notes,

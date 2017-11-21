@@ -147,7 +147,7 @@ class ListGoal extends Component {
         console.log('this.props.goal._id in deleteItem in ListGoal', this.props.goal._id);
 // /deleteItem/:delete_id
     var self = this;
-    var url = 'http://localhost:5000/calendar/deleteItem/' + this.props.goal._id;
+    var url = 'http://limitless-badlands-52386.herokuapp.com/calendar/deleteItem/' + this.props.goal._id;
 
     axios.delete(url)
       .then((response)=>{

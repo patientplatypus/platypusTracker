@@ -95,7 +95,7 @@ class ContactsPage extends Component {
 
   componentWillMount() {
     var self = this;
-      axios.post('http://localhost:5000/contacts/allcontactinfo')
+      axios.post('http://limitless-badlands-52386.herokuapp.com/contacts/allcontactinfo')
         .then((response)=>{
             var arryAll = [];
             var tempObj = {};
@@ -121,7 +121,7 @@ class ContactsPage extends Component {
 
   getContactsInfo(){
     var self = this;
-      axios.post('http://localhost:5000/contacts/allcontactinfo')
+      axios.post('http://limitless-badlands-52386.herokuapp.com/contacts/allcontactinfo')
         .then((response)=>{
             var arryAll = [];
             var tempObj = {};
@@ -152,7 +152,7 @@ class ContactsPage extends Component {
   contactAdd(e){
     e.preventDefault();
     var self = this;
-    axios.post('http://localhost:5000/contacts/addcontact', {
+    axios.post('http://limitless-badlands-52386.herokuapp.com/contacts/addcontact', {
       linkedIn: this.state.linkedIn,
       name: this.state.name,
       profilePic: this.state.profilePic,

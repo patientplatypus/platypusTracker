@@ -94,7 +94,7 @@ class JobsPage extends Component {
     // console.log('inside getCalendarInfo');
     //jobTitle jobLink companyName jobLocation jobDescription
     //http://orig07.deviantart.net/e9e4/f/2015/145/5/b/5bfba23d515a76f42c3751d4b60dde64-d8uovty.gif
-      axios.post('http://localhost:5000/jobs/alljobinfo')
+      axios.post('http://limitless-badlands-52386.herokuapp.com/jobs/alljobinfo')
         .then((response)=>{
             var arryAll = [];
             var tempObj = {};
@@ -119,7 +119,7 @@ class JobsPage extends Component {
 
   getJobsInfo(){
     var self = this;
-      axios.post('http://localhost:5000/jobs/alljobinfo')
+      axios.post('http://limitless-badlands-52386.herokuapp.com/jobs/alljobinfo')
         .then((response)=>{
             var arryAll = [];
             var tempObj = {};
@@ -149,7 +149,7 @@ class JobsPage extends Component {
     self.setState({
       loading:true
     })
-    axios.post('http://localhost:5000/jobs/search',{
+    axios.post('http://limitless-badlands-52386.herokuapp.com/jobs/search',{
       searchTerm: this.state.searchTerm,
       searchCity: this.state.searchCity
     })

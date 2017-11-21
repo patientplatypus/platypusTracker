@@ -99,7 +99,7 @@ class ListMeetup extends Component {
       location = "no location available";
     }
 
-    axios.post('http://localhost:5000/calendar/addgoal', {
+    axios.post('http://limitless-badlands-52386.herokuapp.com/calendar/addgoal', {
       name: this.props.meetup.name,
       actionType: "***meetup***",
       notes: this.props.meetup.description,

@@ -49,7 +49,7 @@ class UploadFiles extends Component {
   componentDidMount() {
     var self = this;
 
-      axios.get('http://localhost:5000/upload/getall')
+      axios.get('http://limitless-badlands-52386.herokuapp.com/upload/getall')
         .then((response)=>{
           console.log('back from upload/getall', response.data);
           const uploadList = self.state.uploadList.concat(response.data);
@@ -60,7 +60,7 @@ class UploadFiles extends Component {
 
   // updateUploads(){
   //   var self = this;
-  //   axios.get('http://localhost:5000/upload/getall')
+  //   axios.get('http://limitless-badlands-52386.herokuapp.com/upload/getall')
   //     .then((response)=>{
   //       const uploadList = self.state.uploadList.concat(response.data);
   //       self.setState({uploadList});
@@ -79,7 +79,7 @@ class UploadFiles extends Component {
     console.log('this.state.uploadList in onDrop before everything else ', this.state.uploadList);
     file.append('name',files[0]);
     var req=request
-              .post('http://localhost:5000/upload/')
+              .post('http://limitless-badlands-52386.herokuapp.com/upload/')
               .send(file);
     req.end((err,response)=>{
         console.log("upload done!!!!!");
@@ -106,7 +106,7 @@ class UploadFiles extends Component {
              ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
                  0, 0, canvas.width, canvas.height); // destination rectangle
            }
-           img.src="http://localhost:5000/upload/getsinglefile/"+this.state.optionState;
+           img.src="http://limitless-badlands-52386.herokuapp.com/upload/getsinglefile/"+this.state.optionState;
      })
   }
 

@@ -66,7 +66,7 @@ class ListJob extends Component {
   saveJob(e){
     e.preventDefault();
 
-    axios.post('http://localhost:5000/jobs/addjob',{
+    axios.post('http://limitless-badlands-52386.herokuapp.com/jobs/addjob',{
       jobTitle: this.props.job.jobTitle,
       jobLink: this.props.job.jobLink,
       companyName: this.props.job.companyName,

@@ -74,7 +74,7 @@ class FindMeetups extends Component {
     var self = this;
 
 
-    axios.post('http://localhost:5000/meetups/search',{
+    axios.post('http://limitless-badlands-52386.herokuapp.com/meetups/search',{
       searchTerm: this.state.searchTerm
     })
     .then((response)=>{
