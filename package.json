@@ -2,7 +2,7 @@
   "name": "platypus_tracker",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://patientplatypus.github.io/trackerFrontend",
+  "homepage": "https://patientplatypus.github.io/platypusTracker",
   "dependencies": {
     "axios": "^0.16.1",
     "gh-pages": "^1.1.0",
